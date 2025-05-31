@@ -11,12 +11,12 @@ then
     rm ArkOS_R35S-R36S_*.img || echo >/dev/null 2>&1
     ArkOSdl1=${ArkOSdl}.001
     #echo $ArkOSdl1
-    wget -OArkOS_R35S-R36S.img.7z.001 "$ArkOSdl1"
+    wget --no-verbose --quiet -OArkOS_R35S-R36S.img.7z.001 "$ArkOSdl1"
 
     [[ -f "ArkOS_R35S-R36S.img.7z.002" ]] && rm ArkOS_R35S-R36S.img.7z.002
     ArkOSdl2=${ArkOSdl}.002
     #echo $ArkOSdl2
-    wget -OArkOS_R35S-R36S.img.7z.002 "$ArkOSdl2"
+    wget --no-verbose --quiet -OArkOS_R35S-R36S.img.7z.002 "$ArkOSdl2"
     7z x -aoa ArkOS_R35S-R36S.img.7z.001
     rm ArkOS_R35S-R36S.img.7z.001 ArkOS_R35S-R36S.img.7z.002
     sync
