@@ -1,6 +1,5 @@
 **/*.img
-u-boot/
-roms/rocknix-storage
-roms/*.tar
-os_template/
-tmp/
+u-boot
+os_template
+tmp
+/roms
