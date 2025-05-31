@@ -14,8 +14,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
-          chmod a+x ./buildimg ark rocknix armbian
-          ./buildimg ark rocknix armbian
+          chmod a+x ./buildimg.sh ark rocknix armbian
+          ./buildimg.sh ark rocknix armbian
 
       # - name: Release
       #   uses: softprops/action-gh-release@v2
