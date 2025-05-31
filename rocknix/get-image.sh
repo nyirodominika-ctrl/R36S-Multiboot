@@ -1,6 +1,6 @@
 #!/bin/bash
 ThisimgName=rocknix.img
-
+sudo apt install -y lynx
 if [[ ! -f "${ThisimgName}" ]]
 then
     [[ -f "${ThisimgName}.gz" ]] && rm ${ThisimgName}.gz
