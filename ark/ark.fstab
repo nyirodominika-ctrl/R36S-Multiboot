@@ -1,0 +1,8 @@
+LABEL=ark  /  ext4  defaults,noatime  0 1
+
+LABEL=boot /boot vfat defaults 0 2
+
+LABEL=EZSTORAGE /EZSTORAGE vfat defaults,auto,umask=000,uid=1002,gid=1002,noatime 0 0
+##trywithout####pre-firstrun##/EZSTORAGE/.uglystuff/ark/roms /roms none nofail,x-systemd.device-timeout=7,bind
+
+##pre-firstrun##/roms/tools /opt/system/Tools none nofail,x-systemd.device-timeout=7,bind
