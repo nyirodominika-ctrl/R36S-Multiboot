@@ -18,3 +18,6 @@ sudo umount ${InstallDev}
 
 sync
 sudo losetup -d ${armbianlodev}
+
+[[ "$BuildImgEnv" == "github" ]] && rm ${ThisimgName}
+
