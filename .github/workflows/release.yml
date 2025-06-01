@@ -26,6 +26,8 @@ jobs:
       - name: Build img
         run: |
           export BuildImgEnv=github 
+          export UBootBuilderRepo=$(echo $GITHUB_REPOSITORY | cut -d/ -f1)
+          echo UBootBuilderRepo=${UBootBuilderRepo}
           chmod a+x ./buildimg.sh ark rocknix armbian
           ./buildimg.sh ark rocknix armbian
           echo df -h /

@@ -86,6 +86,8 @@ function refreshBuildimg {
 if [[ ! -d u-boot ]]
 then
     say get u-boot
+    [[ -z "${UBootBuilderRepo}" ]] && UBootBuilderRepo=EatPrilosec
+    git clone https://github.com/${UBootBuilderRepo}/R36S-u-boot-builder.git u-boot >/dev/null 2>&1
     git clone https://github.com/EatPrilosec/R36S-u-boot-builder.git u-boot >/dev/null 2>&1
     cd u-boot
     chmod a+x build-uboot.sh
@@ -168,7 +170,7 @@ sleep 3
 
 say fill boot partition 
 sudo cp -R commonbootfiles/* "${ImgBootMnt}"
-#sudo sed -i "s|setenv boot2 replaceme|setenv boot2 $1|" "${ImgBootMnt}/boot.ini"
+
 function bootiniadd {
     echo "$@" | sudo tee --append "${ImgBootMnt}/boot.ini"
 }
