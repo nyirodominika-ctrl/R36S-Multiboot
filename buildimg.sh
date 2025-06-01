@@ -80,7 +80,6 @@ then
     say get u-boot
     [[ -z "${UBootBuilderRepo}" ]] && UBootBuilderRepo=EatPrilosec || say UBootBuilderRepo=${UBootBuilderRepo}
     git clone https://github.com/${UBootBuilderRepo}/R36S-u-boot-builder.git u-boot >/dev/null 2>&1
-    git clone https://github.com/EatPrilosec/R36S-u-boot-builder.git u-boot >/dev/null 2>&1
     cd u-boot
     chmod a+x build-uboot.sh
 
