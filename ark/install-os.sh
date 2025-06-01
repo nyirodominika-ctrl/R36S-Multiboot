@@ -49,3 +49,4 @@ sudo mount ${InstallDev} "${DestMnt}" || exit 1
 sayin copy root to ${imgname}
 sudo rsync -aHAX --no-compress ${arkRootMnt}/ ${DestMnt} >/dev/null 2>&1
 sync
+
