@@ -1,13 +1,5 @@
 #!/bin/bash
 
-
-
-
-
-
-
-
-
 function say {
     echo
     echo $@
