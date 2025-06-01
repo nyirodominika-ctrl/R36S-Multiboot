@@ -6,7 +6,9 @@ sudo cp "firstboot.sh" "${ImgBootMnt}"
 sudo cp "ark-firstrun.sh" "${ImgBootMnt}"
 
 sayin copy fstab
+sudo rm "${arkRootMnt}/etc/fstab"
 sudo cp "ark.fstab" "${arkRootMnt}/etc/fstab"
+cat "${arkRootMnt}/etc/fstab" |grep 'LABEL=ark' || exit 1
 sudo cp "setup-ezstorage.service" "${arkRootMnt}/etc/systemd/system/"
 
 
