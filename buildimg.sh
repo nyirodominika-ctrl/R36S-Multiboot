@@ -233,11 +233,8 @@ sudo umount "${ImgBootMnt}"
 sudo losetup -d ${ImgLodev}
 sync
 
-echo ${ImgDir}/${imgname}-$(echo "$@" |sed 's| |-|g')-$(date +%Y-%m-%d-%H%M).img
 
-
-
-OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(date +%Y-%m-%d-%H%M)
+OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M)
 
 OutImg=${ImgDir}/${OutImgNameNoExt}.img
 OutImgXZ=${ImgDir}/${OutImgNameNoExt}.img.xz
