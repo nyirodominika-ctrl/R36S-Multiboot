@@ -250,7 +250,7 @@ if [[ "$BuildImgEnv" == "github" ]]
 then
     fallocate --dig-holes ${OutImg}
 
-    xz -z -9 ${OutImg}
+    xz -z -7 -T0 ${OutImg}
 
     7z a -mx9 -md512m -mfb273 -mmt2 -v2000m ${OutImg7z} ${OutImgXZ}
     ls ${ImgDir}/${imgname}-*
