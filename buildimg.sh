@@ -204,7 +204,7 @@ for arg in "$@"; do
     for step in get-image install-os post-install
     do
         echo
-        [[ -f "./${step}.sh" ]] && echo Start: ${step} || echo skipping ${step}...
+        [[ -f "./${step}.sh" ]] && echo Start: ${arg}: ${step} || echo skipping ${step}...
         echo
         [[ -f "./${step}.sh" ]] && echo source ./${step}.sh  || continue
         echo
@@ -234,5 +234,29 @@ sudo losetup -d ${ImgLodev}
 sync
 
 echo ${ImgDir}/${imgname}-$(echo "$@" |sed 's| |-|g')-$(date +%Y-%m-%d-%H%M).img
-mv ${BuildingImgFullPath} ${ImgDir}/${imgname}-$(echo "$@" |sed 's| |-|g')-$(date +%Y-%m-%d-%H%M).img
+
+
+
+OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(date +%Y-%m-%d-%H%M)
+
+OutImg=${ImgDir}/${OutImgNameNoExt}.img
+OutImgXZ=${ImgDir}/${OutImgNameNoExt}.img.xz
+OutImg7z=${ImgDir}/${OutImgNameNoExt}.img.xz.7z
+
+
+echo ${OutImg}
+
+mv ${BuildingImgFullPath} ${OutImg}
+sync
+
+if [[ "$BuildImgEnv" == "github" ]]
+then
+    fallocate --dig-holes ${OutImg}
+
+    xz -z -9 ${OutImg}
+
+    7z a -mx9 -md512m -mfb273 -mmt2 -v2000m ${OutImg7z} ${OutImgXZ}
+    ls ${ImgDir}/${imgname}-*
+fi
+
 sync
