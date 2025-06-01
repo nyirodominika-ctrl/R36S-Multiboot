@@ -32,12 +32,8 @@ jobs:
           df -h /
           echo df end
 
-
-
-      # - name: Release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     files: |
-      #       u-boot-r36s.bin
-      #       u-boot-r36s.tar
-      #     draft: true
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: R36S-Multiboot-ark-rocknix-armbian-2025-06-01-0040.img.xz.7z.*
+          draft: true
