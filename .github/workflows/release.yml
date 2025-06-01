@@ -28,9 +28,9 @@ jobs:
           export BuildImgEnv=github 
           chmod a+x ./buildimg.sh ark rocknix armbian
           ./buildimg.sh ark rocknix armbian
-          echo dh -h /
-          dh -h /
-          echo dh end
+          echo df -h /
+          df -h /
+          echo df end
 
 
 
