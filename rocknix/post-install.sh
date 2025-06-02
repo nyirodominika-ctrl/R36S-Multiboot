@@ -40,4 +40,4 @@ sudo umount ${InstallDev}
 
 sync
 sudo losetup -d ${rocknixlodev}
-[[ "$BuildImgEnv" == "github" ]] && rm ${ThisimgName}
+[[ "$BuildImgEnv" == "github" ]] && rm ${ThisimgName} || sayin keep ${ThisimgName}
