@@ -18,7 +18,10 @@ then
     sync
     sleep 2
     fsck.fat -a ${EZSDevPart}
+    sync
+    sleep 2
     mount -t vfat -o umask=000,noatime ${EZSDevPart} /storage/EZSTORAGE
     mkdir -p /storage/EZSTORAGE/.uglystuff
     touch /storage/EZSTORAGE/.uglystuff/storagewasexpanded
+    reboot
 fi
