@@ -5,7 +5,7 @@
 if [[ "$1" = "ark" ]]
 then
 	RomDir=/roms
-	EZRomDir=/roms
+	EZRomDir=/EZSTORAGE
 	[[ ! -d ${RomDir}/advision ]] && mkdir -p ${RomDir}/advision
 	[[ ! -d ${EZRomDir}/roms/00-ark-only/advision ]] && mkdir -p ${EZRomDir}/roms/00-ark-only/advision
 	mount --bind ${EZRomDir}/roms/00-ark-only/advision ${RomDir}/advision
