@@ -18,8 +18,9 @@ jobs:
       - name: Set build date
         id: set_date
         run:  |
-          echo "datedash=$(date +%Y-%m-%d-%H%M%S)" >> $GITHUB_OUTPUT 
-          echo "date=$(echo $datedash | sed 's|\-||g')" >> $GITHUB_OUTPUT 
+          export datenow=$(date +%Y-%m-%d-%H%M%S)
+          echo "datedash=$(echo $datenow)" >> $GITHUB_OUTPUT 
+          echo "date=$(echo $datenow | sed 's|\-||g')" >> $GITHUB_OUTPUT 
 
   
   build:
