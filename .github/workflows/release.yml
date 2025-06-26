@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: release ArkBiaNix
+name: release them all BWUAHAHAHAH
 on:
   workflow_dispatch:
 
