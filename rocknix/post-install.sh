@@ -1,10 +1,10 @@
 #!/bin/bash
-say Post-installing ark to ${imgname}
+say Post-installing ${OsName} to ${imgname}
 
 
 
 sayin mount ${InstallDev} "${DestMnt}"
-DestMnt=${tmpmnts}/${imgname}-rocknix
+DestMnt=${tmpmnts}/${imgname}-${OsName}
 mkdir -p "${DestMnt}"
 sudo mount ${InstallDev} "${DestMnt}"
 
@@ -35,9 +35,9 @@ sudo chmod a+x "${DestMnt}/.config/autostart/02-setup-EZSTORAGE.sh"
 
 sayin cleanup mounts and img dev
 sync
-sudo umount ${rocknixlodev}p1 
+sudo umount ${Thislodev}p1 
 sudo umount ${InstallDev}
 
 sync
-sudo losetup -d ${rocknixlodev}
-[[ "$BuildImgEnv" == "github" ]] && rm ${ThisimgName} || sayin keep ${ThisimgName}
+sudo losetup -d ${Thislodev}
+[[ "$BuildImgEnv" == "github" ]] && rm ${ThisImgName} || sayin keep ${ThisImgName}

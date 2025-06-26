@@ -37,4 +37,4 @@ sudo umount ${InstallDev}
 sync
 sudo losetup -d ${arklodev}
 
-[[ "$BuildImgEnv" == "github" ]] && rm ${arkimgName} || sayin keep ${arkimgName}
+[[ "$BuildImgEnv" == "github" ]] && rm ${ThisImgName} || sayin keep ${ThisImgName}

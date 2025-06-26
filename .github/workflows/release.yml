@@ -4,6 +4,10 @@ name: release ArkBiaNix
 on:
   workflow_dispatch:
 
+# amberelec ark bookworm jammy noble pan4elec plucky rocknix uos   
+# oslist: [ark amberelec, ark pan4elec, ark rocknix, ark uos, amberelec pan4elec, amberelec rocknix, amberelec uos, pan4elec rocknix, pan4elec uos, rocknix uos, ark amberelec pan4elec, ark amberelec rocknix, ark amberelec uos, ark pan4elec rocknix, ark pan4elec uos, ark rocknix uos, amberelec pan4elec rocknix, amberelec pan4elec uos, amberelec rocknix uos, pan4elec rocknix uos, ark amberelec pan4elec rocknix, ark amberelec pan4elec uos, ark amberelec rocknix uos, ark pan4elec rocknix uos, amberelec pan4elec rocknix uos, ark amberelec pan4elec rocknix uos]
+# armbian: [NoArmbian, bookworm, jammy, noble, plucky]
+
 jobs:
   build:
     runs-on: ubuntu-latest

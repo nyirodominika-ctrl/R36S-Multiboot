@@ -1,0 +1,1 @@
+../bookworm/get-image.sh

@@ -1,0 +1,1 @@
+../bookworm/post-install.sh

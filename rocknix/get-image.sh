@@ -1,12 +1,12 @@
 #!/bin/bash
-ThisimgName=rocknix.img
+
 sudo apt install -y lynx
-if [[ ! -f "${ThisimgName}" ]]
+if [[ ! -f "${ThisImgName}" ]]
 then
-    [[ -f "${ThisimgName}.gz" ]] && rm ${ThisimgName}.gz
-    [[ -f "${ThisimgName}" ]] && rm ${ThisimgName}
+    [[ -f "${ThisImgName}.gz" ]] && rm ${ThisImgName}.gz
+    [[ -f "${ThisImgName}" ]] && rm ${ThisImgName}
     ROCKNIXdl=$(lynx -listonly -dump -nonumbers "https://github.com/ROCKNIX/distribution/releases/latest" |grep "ROCKNIX-RK3326.aarch64-.*-a.img.gz" 2>/dev/null)
     echo $ROCKNIXdl
-    wget  --no-verbose --quiet -O${ThisimgName}.gz "$ROCKNIXdl"
-    gunzip -f ${ThisimgName}.gz
+    wget  --no-verbose --quiet -O${ThisImgName}.gz "$ROCKNIXdl"
+    gunzip -f ${ThisImgName}.gz
 fi

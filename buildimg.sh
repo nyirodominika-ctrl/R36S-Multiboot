@@ -4,18 +4,21 @@ function say {
     echo
     echo $@
 }
+function sayin {
+    echo ► $@
+}
+
 u=$(id -u)
 g=$(id -g)
 imgname=R36S-Multiboot
 
-ImgDir=$(pwd)
-BuildingImgFullPath=${ImgDir}/building.img
+StartDir=$(pwd)
+BuildingImgFullPath=${StartDir}/building.img
 [[ -f "$BuildingImgFullPath" ]] && rm "$BuildingImgFullPath" 
 
 for mp in $(mount | grep "$(pwd)" |cut -d' ' -f1)
 do
     sudo umount "${mp}" && echo ${mp} was stll mounted || exit 1
-
 done
 
 [[ -d tmp ]] && rm -rf tmp || echo >/dev/null 2>&1
@@ -37,7 +40,14 @@ storagesize=256
 
 for arg in "$@"; do
     thissizereq=0
-    [[ "$arg" = "rocknix" ]] && bootsize=$((bootsize + 2032)) || bootsize=$((bootsize + 128))
+    #[[ "$arg" = "rocknix" ]] && bootsize=$((bootsize + 2032)) || bootsize=$((bootsize + 128))
+    if [[ -f "$arg/bootsizereq" ]] 
+    then
+        thissizereq=$(cat "$arg/bootsizereq")
+        bootsize=$((bootsize + thissizereq)) 
+    else
+        bootsize=$((bootsize + 128))
+    fi
     if [[ -f "$arg/sizereq" ]] 
     then
         thissizereq=$(cat "$arg/sizereq")
@@ -103,23 +113,26 @@ fi
 cd sd_fuse
 chmod a+x ./sd_fusing.sh 
 ./sd_fusing.sh ${ImgLodev} >/dev/null 2>&1
-cd "${ImgDir}"
+cd "${StartDir}"
 
 say create partition table
-sudo parted -s ${ImgLodev} mklabel gpt || echo
+sudo parted -s ${ImgLodev} mklabel msdos #|| echo
 
 function newpart {
     local start=$nextpartstart
     local partsize=$1
     local end=$((start + partsize))
+    local ptype=notset 
     echo ► create from ${start}MiB to ${end}MiB
     [[ "$2" == "fat" ]] && local type=fat32 || echo >/dev/null 2>&1
     [[ "$2" == "ext4" ]] && local type=ext4 || echo >/dev/null 2>&1
 
-    sudo parted -s ${ImgLodev} mkpart primary $type ${start}MiB ${end}MiB || echo >/dev/null 2>&1
+    [[ $partcount == 0 ]] && ptype=primary || ptype=logical
+    sudo parted -s ${ImgLodev} mkpart $ptype $type ${start}MiB ${end}MiB || echo >/dev/null 2>&1
     refreshBuildimg
     ls ${ImgLodev}p$((partcount + 1)) >/dev/null 2>&1 && partcount=$((partcount + 1)) || exit 1
     nextpartstart=${end}
+    [[ "$ptype" == "logical" ]] && nextpartstart=$((nextpartstart+1)) || echo >/dev/null 2>&1
 
     if [[ "$2" == "fat" ]]
     then
@@ -154,7 +167,7 @@ function newpart {
 
 say create boot partition 
 newpart ${bootsize} fat boot
-ImgBootMnt="${ImgDir}/tmp/boot.tmpmnt"
+ImgBootMnt="${StartDir}/tmp/boot.tmpmnt"
 mkdir -p "${ImgBootMnt}"
 sudo mount ${ImgLodev}p${partcount} "${ImgBootMnt}"
 sleep 3
@@ -163,7 +176,7 @@ say fill boot partition
 sudo cp -R commonbootfiles/* "${ImgBootMnt}"
 
 function bootiniadd {
-    echo "$@" | sudo tee --append "${ImgBootMnt}/boot.ini"
+    echo "$@" | sudo tee --append "${ImgBootMnt}/boot.ini" >/dev/null
 }
 
 bootiniadd odroidgoa-uboot-config
@@ -187,31 +200,46 @@ bootiniadd source 0x00800800
 echo
 cat "${ImgBootMnt}/boot.ini"
 
+# need to setup extended part now that were mbr
+epartstart=$nextpartstart
+while true
+do
+    epartstart=$((epartstart+1))
+    sudo parted -s ${ImgLodev} mkpart extended $epartstart 100% 2>&1 | grep "The closest location we can manage is" >/dev/null 2>&1 && continue || echo epart at $epartstart 
+    partcount=$((partcount+3))
+    nextpartstart=$((nextpartstart+1))
+    break
+done
+
 sleep 20
 for arg in "$@"; do
-    tmpmnts="${ImgDir}/tmp/${arg}.tmpmnts"
+    OsName=${arg}
+    ThisImgName=${OsName}.img
+
+    tmpmnts="${StartDir}/tmp/${OsName}.tmpmnts"
     mkdir -p "$tmpmnts" 
-    cd "${ImgDir}/${arg}"
+    OSDir="${StartDir}/${OsName}"
+    cd "${OSDir}"
     chmod a+x ./*.sh
 
-    for step in get-image install-os post-install
+    for step in get-image pre-install install-os post-install
     do
         echo
-        [[ -f "./${step}.sh" ]] && echo Start: ${arg}: ${step} || echo skipping ${step}...
+        [[ -f "./${step}.sh" ]] && echo Start: ${OsName}: ${step} || echo skipping ${step}...
         echo
         [[ -f "./${step}.sh" ]] && echo source ./${step}.sh  || continue
         echo
         source ./${step}.sh 
-        echo End: ${step}
+        echo End: ${OsName}: ${step}
         echo
     done
     sync 
+    cd "${StartDir}"
 done
-cd "${ImgDir}"
 
 say create storage partition 
 newpart ${storagesize} fat EZSTORAGE
-Storagemount="${ImgDir}/tmp/storage.tmpmnt"
+Storagemount="${StartDir}/tmp/storage.tmpmnt"
 
 [[ -d commonStoragefiles ]] && say fill storage partition 
 [[ -d commonStoragefiles ]] && mkdir -p "${Storagemount}"
@@ -229,9 +257,9 @@ sync
 
 OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M)
 
-OutImg=${ImgDir}/${OutImgNameNoExt}.img
-OutImgXZ=${ImgDir}/${OutImgNameNoExt}.img.xz
-OutImg7z=${ImgDir}/${OutImgNameNoExt}.img.xz.7z
+OutImg=${StartDir}/${OutImgNameNoExt}.img
+OutImgXZ=${StartDir}/${OutImgNameNoExt}.img.xz
+OutImg7z=${StartDir}/${OutImgNameNoExt}.img.xz.7z
 
 
 echo ${OutImg}
@@ -246,7 +274,7 @@ then
     xz -z -7 -T0 ${OutImg}
 
     7z a -mx9 -md512m -mfb273 -mmt2 -v2000m ${OutImg7z} ${OutImgXZ}
-    ls ${ImgDir}/${imgname}-*
+    ls ${StartDir}/${imgname}-*
 fi
 
 sync
