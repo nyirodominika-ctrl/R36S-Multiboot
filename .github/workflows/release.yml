@@ -66,5 +66,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: R36S-Multiboot-ark-rocknix-armbian-*.img.xz.7z.*
+          files: R36S-Multiboot-*.img.xz.7z.*
           draft: true
+          name: build ${{ needs.get_build_date.outputs.build_datedash }}
+          tag_name: v${{ needs.get_build_date.outputs.build_date }}
