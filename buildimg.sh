@@ -88,21 +88,15 @@ function refreshBuildimg {
 if [[ ! -d u-boot ]]
 then
     say get u-boot
-    [[ -z "${UBootBuilderRepo}" ]] && UBootBuilderRepo=EatPrilosec || say UBootBuilderRepo=${UBootBuilderRepo}
-    git clone https://github.com/${UBootBuilderRepo}/R36S-u-boot-builder.git u-boot >/dev/null 2>&1
+    mkdir u-boot
     cd u-boot
-    chmod a+x build-uboot.sh
-
-    say build u-boot
-    ./build-uboot.sh >/dev/null 2>&1 || exit 1
+    wget https://github.com/R36S-Stuff/R36S-u-boot-builder/releases/download/rc2-pancho/u-boot-r36s.tar
     cd ..
 fi
 cd u-boot
 if [[ ! -f u-boot-r36s.tar ]]
 then
-    chmod a+x build-uboot.sh
-    say build u-boot
-    ./build-uboot.sh >/dev/null 2>&1 || exit 1
+    exit 1
 fi
 say add uboot
 if [[ ! -d "sd_fuse" ]] 
@@ -254,8 +248,8 @@ sudo umount "${ImgBootMnt}"
 sudo losetup -d ${ImgLodev}
 sync
 
+[[ "$BuildImgEnv" == "github" ]] && OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M) || OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M)
 
-OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M)
 
 OutImg=${StartDir}/${OutImgNameNoExt}.img
 OutImgXZ=${StartDir}/${OutImgNameNoExt}.img.xz
