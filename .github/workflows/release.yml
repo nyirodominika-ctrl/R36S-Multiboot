@@ -89,16 +89,16 @@ jobs:
           echo "This is an excluded combination, skipping."
           exit 0
 
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: true
-          android: true
-          #dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
+      # - name: Free Disk Space (Ubuntu)
+      #   uses: jlumbroso/free-disk-space@main
+      #   with:
+      #     tool-cache: true
+      #     android: true
+      #     #dotnet: true
+      #     haskell: true
+      #     large-packages: true
+      #     docker-images: true
+      #     swap-storage: true
           
       - uses: actions/checkout@v4
 
@@ -106,16 +106,19 @@ jobs:
 
       - name: Build img
         run: |
-          export BuildImgEnv=github 
-          export UBootBuilderRepo=$(echo $GITHUB_REPOSITORY | cut -d/ -f1)
           export GH_build_date=${{ needs.get_build_date.outputs.build_date }}
-          echo UBootBuilderRepo=${UBootBuilderRepo}
           for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }}
           do 
             [[ $i == "skip"* ]] && continue
-            export NewOSList=$NewOSList $i
+            echo "Adding $i to NewOSList"
+            if [[ -z "$NewOSList" ]]; then
+              export NewOSList=$i
+            else
+              export NewOSList="$NewOSList $i"
+            fi
           done
           [[ ! "${{ matrix.armbian }}" = skiparmbian ]] && export NewOSList="$NewOSList ${{ matrix.armbian }}"
+          echo NewOSList=$NewOSList
           export NewOSList="$(echo $NewOSList| xargs)"
           echo NewOSList=$NewOSList  
           chmod a+x ./buildimg.sh 
