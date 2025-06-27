@@ -93,6 +93,7 @@ jobs:
         run: |
           export BuildImgEnv=github 
           export UBootBuilderRepo=$(echo $GITHUB_REPOSITORY | cut -d/ -f1)
+          export GH_build_date=$(echo ${{ needs.get_build_date.outputs.build_date }} 
           echo UBootBuilderRepo=${UBootBuilderRepo}
           for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }}
           do 

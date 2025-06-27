@@ -248,7 +248,9 @@ sudo umount "${ImgBootMnt}"
 sudo losetup -d ${ImgLodev}
 sync
 
-[[ "$BuildImgEnv" == "github" ]] && OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M) || OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M)
+[[ "$BuildImgEnv" == "github" ]] && 
+OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$GH_build_date || 
+OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M)
 
 
 OutImg=${StartDir}/${OutImgNameNoExt}.img
