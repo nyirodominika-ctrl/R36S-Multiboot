@@ -34,12 +34,15 @@ jobs:
         include:
           - armbian: bookworm jammy noble plucky
         exclude:
+          # skip u-boot only image
           - amberelec: skipamberelec
             ark: skipark
             pan4elec: skippan4elec
             rocknix: skiprocknix
             uos: skipuos
             armbian: skiparmbian
+
+          # skip single os images
           - amberelec: amberelec
             ark: skipark
             pan4elec: skippan4elec
@@ -70,8 +73,34 @@ jobs:
             rocknix: skiprocknix
             uos: uos
             armbian: skiparmbian
+
+          # skip single armbian images
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skiprocknix
+            armbian: bookworm
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skiprocknix
+            armbian: jammy
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skiprocknix
+            armbian: noble
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skiprocknix
+            armbian: plucky
           
-      fail-fast: false
+      fail-fast: true
     runs-on: ubuntu-latest
     needs: get_build_date
 
