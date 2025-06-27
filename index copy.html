@@ -154,8 +154,6 @@
         bookworm jammy noble plucky    
         https://github.com/EatPrilosec/R36S-Multiboot/releases/download/untagged-f4f7d6f22d7c774bb614/R36S-Multiboot-amberelec-pan4elec-2025-06-25-2309.img.xz.7z.001 
 -->
-<h2>R36S-Multiboot image picker</h2>
-<p>Check the OSes you want to include in the image name, then select the Armbian version if applicable. The image name and download links will be generated below.</p>
 
 <h3>Select OSes</h3>
 <label>
@@ -216,7 +214,6 @@
 </label><br><br>
 
 <p id="result"></p>
-<h4>Download links</h4>
 <div id="assetList"></div>
 
 <footer id="repoFooter" style="margin-top:2em; color:#ff6f00; font-size:0.95em;"></footer>
@@ -253,15 +250,6 @@ async function fetchAndDisplayAssets() {
     const data = await response.json();
     const assets = data.assets || [];
     const matches = assets.filter(asset => regex.test(asset.name));
-
-    // Sort numerically by extension (e.g., .001, .002, ...)
-    matches.sort((a, b) => {
-      const extA = a.name.match(/\.([0-9]{3})$/);
-      const extB = b.name.match(/\.([0-9]{3})$/);
-      const numA = extA ? parseInt(extA[1], 10) : 0;
-      const numB = extB ? parseInt(extB[1], 10) : 0;
-      return numA - numB;
-    });
 
     if (matches.length === 0) {
       assetListElem.innerHTML = "No matching assets found.";
