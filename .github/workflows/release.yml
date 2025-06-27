@@ -93,7 +93,7 @@ jobs:
         run: |
           export BuildImgEnv=github 
           export UBootBuilderRepo=$(echo $GITHUB_REPOSITORY | cut -d/ -f1)
-          export GH_build_date=$(echo ${{ needs.get_build_date.outputs.build_date }} 
+          export GH_build_date=${{ needs.get_build_date.outputs.build_date }}
           echo UBootBuilderRepo=${UBootBuilderRepo}
           for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }}
           do 
@@ -114,5 +114,5 @@ jobs:
         with:
           files: R36S-Multiboot-*.img.xz.7z.*
           draft: true
-          name: build ${{ needs.get_build_date.outputs.build_datedash }}
+          name: batch ${{ needs.get_build_date.outputs.build_datedash }}
           tag_name: v${{ needs.get_build_date.outputs.build_date }}
