@@ -38,13 +38,26 @@ bootsize=112
 imgsizereq=32
 storagesize=256
 
+# shrink armbian sizes if building the big one
+if [[ "$BuildImgEnv" == "github" ]] 
+then
+    if [[ "$@" == *"bookworm jammy noble pluck"* ]] # anticipate never-ending ubuntu releases
+    then
+        say "Building the big one, reducing armbian size"
+        # jammy+/sizereq is currently a symlink to bookworm/sizereq
+        # so we can just change bookworm/sizereq
+        say "Reducing armbian/sizereq to 5120"
+        echo 5120 > bookworm/sizereq
+    fi
+fi
+ 
 for arg in "$@"; do
     thissizereq=0
     #[[ "$arg" = "rocknix" ]] && bootsize=$((bootsize + 2032)) || bootsize=$((bootsize + 128))
     if [[ -f "$arg/bootsizereq" ]] 
     then
-        thissizereq=$(cat "$arg/bootsizereq")
-        bootsize=$((bootsize + thissizereq)) 
+        bootsizereq=$(cat "$arg/bootsizereq")
+        bootsize=$((bootsize + bootsizereq)) 
     else
         bootsize=$((bootsize + 128))
     fi
@@ -248,9 +261,7 @@ sudo umount "${ImgBootMnt}"
 sudo losetup -d ${ImgLodev}
 sync
 
-[[ "$BuildImgEnv" == "github" ]] && 
-OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$GH_build_date || 
-OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M)
+[[ "$BuildImgEnv" == "github" ]] && OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$GH_build_date || OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M)
 
 
 OutImg=${StartDir}/${OutImgNameNoExt}.img

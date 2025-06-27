@@ -14,7 +14,7 @@ jobs:
       - name: Set build date
         id: set_date
         run:  |
-          export datenow=$(date +%Y-%m-%d-%H%M%S)
+          export datenow=$(TZ=America/New_York date +%Y-%m-%d-%H%M%S)
           echo "datedash=$(echo $datenow)" >> $GITHUB_OUTPUT 
           echo "date=$(echo $datenow | sed 's|\-||g')" >> $GITHUB_OUTPUT 
 
@@ -96,7 +96,7 @@ jobs:
         with:
           tool-cache: true
           android: true
-          #dotnet: true
+          dotnet: true
           haskell: true
           large-packages: true
           docker-images: true
