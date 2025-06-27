@@ -4,10 +4,6 @@ name: release them all BWUAHAHAHAH
 on:
   workflow_dispatch:
 
-# amberelec ark bookworm jammy noble pan4elec plucky rocknix uos   
-# oslist: [ark amberelec, ark pan4elec, ark rocknix, ark uos, amberelec pan4elec, amberelec rocknix, amberelec uos, pan4elec rocknix, pan4elec uos, rocknix uos, ark amberelec pan4elec, ark amberelec rocknix, ark amberelec uos, ark pan4elec rocknix, ark pan4elec uos, ark rocknix uos, amberelec pan4elec rocknix, amberelec pan4elec uos, amberelec rocknix uos, pan4elec rocknix uos, ark amberelec pan4elec rocknix, ark amberelec pan4elec uos, ark amberelec rocknix uos, ark pan4elec rocknix uos, amberelec pan4elec rocknix uos, ark amberelec pan4elec rocknix uos]
-# armbian: [NoArmbian, bookworm, jammy, noble, plucky]
-
 jobs:
   get_build_date:
     runs-on: ubuntu-latest
@@ -22,18 +18,21 @@ jobs:
           echo "datedash=$(echo $datenow)" >> $GITHUB_OUTPUT 
           echo "date=$(echo $datenow | sed 's|\-||g')" >> $GITHUB_OUTPUT 
 
-  
+
   build:
     strategy:
       matrix:
-      
-        # amberelec ark bookworm jammy noble pan4elec plucky rocknix uos   
-        #oslist: [ark amberelec, ark pan4elec, ark rocknix, ark uos, amberelec pan4elec, amberelec rocknix, amberelec uos, pan4elec rocknix, pan4elec uos, rocknix uos, ark amberelec pan4elec, ark amberelec rocknix, ark amberelec uos, ark pan4elec rocknix, ark pan4elec uos, ark rocknix uos, amberelec pan4elec rocknix, amberelec pan4elec uos, amberelec rocknix uos, pan4elec rocknix uos, ark amberelec pan4elec rocknix, ark amberelec pan4elec uos, ark amberelec rocknix uos, ark pan4elec rocknix uos, amberelec pan4elec rocknix uos, ark amberelec pan4elec rocknix uos]
-        #armbian: [NoArmbian, bookworm, jammy, noble, plucky]
+        # amberelec ark pan4elec rocknix uos   
+        # bookworm jammy noble plucky
+        # oslist: [ark amberelec, ark pan4elec, ark rocknix, ark uos, amberelec pan4elec, amberelec rocknix, amberelec uos, pan4elec rocknix, pan4elec uos, rocknix uos, ark amberelec pan4elec, ark amberelec rocknix, ark amberelec uos, ark pan4elec rocknix, ark pan4elec uos, ark rocknix uos, amberelec pan4elec rocknix, amberelec pan4elec uos, amberelec rocknix uos, pan4elec rocknix uos, ark amberelec pan4elec rocknix, ark amberelec pan4elec uos, ark amberelec rocknix uos, ark pan4elec rocknix uos, amberelec pan4elec rocknix uos, ark amberelec pan4elec rocknix uos]
+        amberelec:  [amberelec, skipamberelec]
+        ark:        [ark, skipark]
+        pan4elec:   [pan4elec, skippan4elec]
+        rocknix:    [rocknix, skiprocknix]
+        uos:        [uos, skipuos]
+        armbian:    [skiparmbian, bookworm, jammy, noble, plucky]
         include:
-          - oslist: amberelec ark pan4elec rocknix uos
-            armbian: bookworm jammy noble plucky
-          #- armbian: bookworm jammy noble plucky
+          - armbian: bookworm jammy noble plucky
       fail-fast: false
     runs-on: ubuntu-latest
     needs: get_build_date
@@ -57,10 +56,16 @@ jobs:
           export BuildImgEnv=github 
           export UBootBuilderRepo=$(echo $GITHUB_REPOSITORY | cut -d/ -f1)
           echo UBootBuilderRepo=${UBootBuilderRepo}
-          [[ "${{ matrix.armbian }}" = NoArmbian ]] && export RealOSList="${{ matrix.oslist }}" || export RealOSList="${{ matrix.oslist }} ${{ matrix.armbian }}"
-          echo RealOSList=$RealOSList  
+          for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }}
+          do 
+            [[ $i == "skip"* ]] && continue
+            echo "export NewOSList=$NewOSList $i"
+          done
+          [[ ! "${{ matrix.armbian }}" = skiparmbian ]] && export NewOSList="$NewOSList ${{ matrix.armbian }}"
+          export NewOSList="$(echo $NewOSList| xargs)"
+          echo NewOSList=$NewOSList  
           chmod a+x ./buildimg.sh 
-          ./buildimg.sh $RealOSList 
+          ./buildimg.sh $NewOSList
           echo df -h /
           df -h /
           echo df end
