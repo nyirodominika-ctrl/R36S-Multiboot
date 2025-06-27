@@ -253,7 +253,6 @@ Storagemount="${StartDir}/tmp/storage.tmpmnt"
 [[ -d commonStoragefiles ]] && sudo mount ${ImgLodev}p${partcount} "${Storagemount}"
 [[ -d commonStoragefiles ]] && sudo cp -R commonStoragefiles/* "${Storagemount}" || echo >/dev/null 2>&1
 
-
 say finalize image
 sync
 sudo umount "${ImgBootMnt}"
@@ -263,11 +262,9 @@ sync
 
 [[ "$BuildImgEnv" == "github" ]] && OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$GH_build_date || OutImgNameNoExt=${imgname}-$(echo "$@" |sed 's| |-|g')-$(TZ=America/New_York date +%Y-%m-%d-%H%M)
 
-
 OutImg=${StartDir}/${OutImgNameNoExt}.img
 OutImgXZ=${StartDir}/${OutImgNameNoExt}.img.xz
 OutImg7z=${StartDir}/${OutImgNameNoExt}.img.xz.7z
-
 
 echo ${OutImg}
 
