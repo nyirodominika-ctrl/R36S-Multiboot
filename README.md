@@ -1,16 +1,16 @@
 # [EatPrilosec/R36S-Multiboot is my testing repo](https://github.com/EatPrilosec/R36S-Multiboot)
 
-# [Releases are at R36S-Stuff/R36S-Multiboot](https://r36s-stuff.github.io/R36S-Multiboot)
+# [Releases are at r36s-stuff.github.io/R36S-Multiboot](https://r36s-stuff.github.io/R36S-Multiboot)
 
 # Gameconsole R36S Multiboot images (and builder)
 
 ## \#\#\# WIP \#\#\#
 
 ### Notes
-- nothing is ready yet, expect problems
-- armbian standalone images are at [R36S-Stuff](https://github.com/R36S-Stuff/R36S-Armbian/releases/latest)
-- image(s) are big and most likely split into parts for github release.
-    - [get all the numbered files (.001, etc)](https://r36s-stuff.github.io/R36S-Multiboot) and extract it with 7zip or nanaZip. (linux uswrs, ive found p7zip to be unreliabe, try the official 7zip if you have issues.)
+- Nothing is fully ready yet, expect problems
+- Armbian standalone images are at [R36S-Stuff](https://github.com/R36S-Stuff/R36S-Armbian/releases/latest)
+- Image(s) are big and most likely split into parts for github release.
+    - [get all the numbered files (.001, etc)](https://r36s-stuff.github.io/R36S-Multiboot) and extract it with 7zip or nanaZip. (linux users, ive found p7zip to be unreliabe, try the official 7zip if you have issues.)
 
 ### Builder info
 - builds in WSL
@@ -65,9 +65,9 @@
 # black screen?
 # Panel Chooser info
 
-these images support the original R36S panel, and the 4 new panels, all in one image!
+These images support the original R36S panel, and the 4 new panels, all in one image!
 
-- Hold R1 and a face button while powering on the device to set panel
+- Hold R1 and a face button (see below) while powering on the device to set panel
 - if done correctly, the device will power off, and the next boot should show the logo.
     - if you miss the window and the R36S doesnt automatically power off, let it sit for a bit to setup the EZSTORAGE partition.
         - this can take 5-15 minutes depending on the first boot OS and sedcard speed.
