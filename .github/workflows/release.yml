@@ -135,3 +135,6 @@ jobs:
           draft: true
           name: batch ${{ needs.get_build_date.outputs.build_datedash }}
           tag_name: v${{ needs.get_build_date.outputs.build_date }}
+          body: |
+            # [Download Images Here](https://${{ github.repository_owner }}.github.io/R36S-Multiboot/)
+            (https://${{ github.repository_owner }}.github.io/R36S-Multiboot)

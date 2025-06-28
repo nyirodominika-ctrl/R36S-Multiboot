@@ -1,3 +1,7 @@
+# [EatPrilosec/R36S-Multiboot is my testing repo](https://github.com/EatPrilosec/R36S-Multiboot)
+
+# [Releases are at R36S-Stuff/R36S-Multiboot](https://github.com/R36S-Stuff/R36S-Multiboot/releases/latest)
+
 # Gameconsole R36S Multiboot images (and builder)
 
 ## \#\#\# WIP \#\#\#
@@ -5,7 +9,7 @@
 ### Multiboot Images info
 - nothing is ready yet, expect problems
 - Armbian is the least ready, uses ArkOS's kernel, and requires a usb keyboard or UART to setup at the moment.
-- image(s) are big and most likely split into parts for github release. get all the numbered files (.001, etc) and extract it with 7zip or nanaZip 
+- image(s) are big and most likely split into parts for github release. get all the numbered files (.001, etc) and extract it with 7zip or nanaZip
 
 ### Builder info
 - builds in WSL
@@ -29,23 +33,23 @@
 # Left      =   b14
 # Right     =   b15
 
- 
-#    Down       =   
-#    Left       =   
-#    Up         =   
-#    Right      =   
 
-#    Function   =   
+#    Down       =   Rocknix
+#    Left       =   PAN4ELEC
+#    Up         =   UnofficialOS
+#    Right      =   Amberelec
+
+#    Function   =
 #    Start (+)  =   ArkOS
-#    Select (-) =   Rocknix
+#    Select (-) =
 
 #    B (south)  =   Armbian Bookworm
 #    Y (west)   =   Armbian Jammy
 #    X (north)  =   Armbian Noble
-#    A (east)   =   Armbian Plucky
+#    A (east)   =   Armbian Plucky (TODO: armbian to one button after testing)
 
 
-# # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # #
 #  _________________________________  #
 # |                                 | #
 # |                                 | #
@@ -67,5 +71,5 @@
 #      |     | Roc  Ark |     |       #
 #       \ _ /            \ _ /        #
 #                                     #
-# # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # #
 ```
