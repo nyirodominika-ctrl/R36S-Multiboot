@@ -1,4 +1,5 @@
 **/*.img
+**/*.img.*
 **/.git
 u-boot
 os_template
