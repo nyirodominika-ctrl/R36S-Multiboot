@@ -6,7 +6,7 @@ Before=emulationstation.service
 Type=oneshot
 User=root
 WorkingDirectory=/boot
-ExecStart=/bin/bash /boot/setup-ezstorage.sh ark
+ExecStart=/bin/bash /boot/setup-ezstorage.sh ark /roms /EZSTORAGE
 Restart=no
 
 [Install]

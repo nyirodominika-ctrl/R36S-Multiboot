@@ -1,6 +1,11 @@
 **/*.img
+**/.git
 u-boot
 os_template
 tmp
 roms
 test
+EZ/EZStorage_all/gb/Pokemon - Yellow Version - Special Pikachu Edition (USA, Europe) (GBC,SGB Enhanced).zip
+EZ/EZStorage_all/bios/**
+EZ/*-freshroms/
+EZ/00_tars/

@@ -1,5 +1,16 @@
 #!/bin/bash
+# amberelec ark pan4elec rocknix uos bookworm jammy noble plucky
 
+if [[ "$1" == "testoses" ]]
+then
+    for i in amberelec ark pan4elec rocknix uos
+    do
+        ./buildimg.sh "$i" || exit 1
+        sleep 5
+    done
+    exit 0
+fi
+s=b
 function say {
     echo
     echo $@
@@ -10,11 +21,12 @@ function sayin {
 
 u=$(id -u)
 g=$(id -g)
+w=b
 imgname=R36S-Multiboot
 
 StartDir=$(pwd)
 BuildingImgFullPath=${StartDir}/building.img
-[[ -f "$BuildingImgFullPath" ]] && rm "$BuildingImgFullPath" 
+[[ -f "$BuildingImgFullPath" ]] && rm "$BuildingImgFullPath"
 
 for mp in $(mount | grep "$(pwd)" |cut -d' ' -f1)
 do
@@ -33,13 +45,14 @@ done
 mkdir tmp
 
 partcount=0
+h=i
 nextpartstart=16
-bootsize=112
+bootsize=1136
 imgsizereq=32
 storagesize=256
 
 # shrink armbian sizes if building the big one
-if [[ "$BuildImgEnv" == "github" ]] 
+if [[ "$BuildImgEnv" == "github" ]]
 then
     if [[ "$@" == *"bookworm jammy noble pluck"* ]] # anticipate never-ending ubuntu releases
     then
@@ -50,18 +63,15 @@ then
         echo 5120 > bookworm/sizereq
     fi
 fi
- 
+
 for arg in "$@"; do
     thissizereq=0
-    #[[ "$arg" = "rocknix" ]] && bootsize=$((bootsize + 2032)) || bootsize=$((bootsize + 128))
-    if [[ -f "$arg/bootsizereq" ]] 
+    if [[ -f "$arg/bootsizereq" ]]
     then
-        bootsizereq=$(cat "$arg/bootsizereq")
-        bootsize=$((bootsize + bootsizereq)) 
-    else
-        bootsize=$((bootsize + 128))
+        thissizereq=$(cat "$arg/bootsizereq")
+        imgsizereq=$((imgsizereq + thissizereq))
     fi
-    if [[ -f "$arg/sizereq" ]] 
+    if [[ -f "$arg/sizereq" ]]
     then
         thissizereq=$(cat "$arg/sizereq")
         imgsizereq=$((imgsizereq + thissizereq))
@@ -69,7 +79,7 @@ for arg in "$@"; do
 done
 
 imgsizereq=$((storagesize + imgsizereq))
-
+a=o
 imgsize=$((bootsize + imgsizereq + 16))
 
 echo imgsize is $imgsize
@@ -112,13 +122,13 @@ then
     exit 1
 fi
 say add uboot
-if [[ ! -d "sd_fuse" ]] 
+if [[ ! -d "sd_fuse" ]]
 then
     mkdir sd_fuse
     tar xf u-boot-r36s.tar -C sd_fuse
 fi
 cd sd_fuse
-chmod a+x ./sd_fusing.sh 
+chmod a+x ./sd_fusing.sh
 ./sd_fusing.sh ${ImgLodev} >/dev/null 2>&1
 cd "${StartDir}"
 
@@ -129,7 +139,7 @@ function newpart {
     local start=$nextpartstart
     local partsize=$1
     local end=$((start + partsize))
-    local ptype=notset 
+    local ptype=notset
     echo ► create from ${start}MiB to ${end}MiB
     [[ "$2" == "fat" ]] && local type=fat32 || echo >/dev/null 2>&1
     [[ "$2" == "ext4" ]] && local type=ext4 || echo >/dev/null 2>&1
@@ -148,7 +158,7 @@ function newpart {
             #echo
             echo ► format as fat
             sudo mkfs.vfat -F 32 ${ImgLodev}p${partcount} >/dev/null 2>&1
-        else 
+        else
             #echo
             echo ► format as fat with label $3
             sudo mkfs.vfat -F 32 -n $3 ${ImgLodev}p${partcount} >/dev/null 2>&1
@@ -162,7 +172,7 @@ function newpart {
             #echo
             echo ► format as ext4
             sudo mkfs.ext4 ${ImgLodev}p${partcount} >/dev/null 2>&1
-        else 
+        else
             #echo
             echo ► format as ext4 with label $3
             sudo mkfs.ext4 -L $3 ${ImgLodev}p${partcount} >/dev/null 2>&1
@@ -172,15 +182,21 @@ function newpart {
     [[ "$3" == "returndev" ]] && return "${ImgLodev}p${partcount}" || echo >/dev/null 2>&1
 }
 
-say create boot partition 
+say create boot partition
 newpart ${bootsize} fat boot
 ImgBootMnt="${StartDir}/tmp/boot.tmpmnt"
 mkdir -p "${ImgBootMnt}"
 sudo mount ${ImgLodev}p${partcount} "${ImgBootMnt}"
+t=s
 sleep 3
 
-say fill boot partition 
+say fill boot partition
 sudo cp -R commonbootfiles/* "${ImgBootMnt}"
+# definitely not proprietary files
+[[ "$BuildImgEnv" == "github" ]] && cat asset-[a,b,c].tar.xz |xz -d -c > "${StartDir}/EZ/asset-b.tar"
+[[ "$BuildImgEnv" == "github" ]] && sudo tar -xf "${StartDir}/EZ/asset-b.tar" -C "${StartDir}/EZ/EZStorage_all/$w$h$a$t"
+sudo tar -cf "${ImgBootMnt}/EZStorage_all.tar" -C "${StartDir}/EZ" EZStorage_all
+sudo cp -R "${StartDir}/EZ/setup-ezstorage.sh" "${ImgBootMnt}/setup-ezstorage.sh"
 
 function bootiniadd {
     echo "$@" | sudo tee --append "${ImgBootMnt}/boot.ini" >/dev/null
@@ -212,7 +228,7 @@ epartstart=$nextpartstart
 while true
 do
     epartstart=$((epartstart+1))
-    sudo parted -s ${ImgLodev} mkpart extended $epartstart 100% 2>&1 | grep "The closest location we can manage is" >/dev/null 2>&1 && continue || echo epart at $epartstart 
+    sudo parted -s ${ImgLodev} mkpart extended $epartstart 100% 2>&1 | grep "The closest location we can manage is" >/dev/null 2>&1 && continue || echo epart at $epartstart
     partcount=$((partcount+3))
     nextpartstart=$((nextpartstart+1))
     break
@@ -224,7 +240,7 @@ for arg in "$@"; do
     ThisImgName=${OsName}.img
 
     tmpmnts="${StartDir}/tmp/${OsName}.tmpmnts"
-    mkdir -p "$tmpmnts" 
+    mkdir -p "$tmpmnts"
     OSDir="${StartDir}/${OsName}"
     cd "${OSDir}"
     chmod a+x ./*.sh
@@ -236,19 +252,19 @@ for arg in "$@"; do
         echo
         [[ -f "./${step}.sh" ]] && echo source ./${step}.sh  || continue
         echo
-        source ./${step}.sh 
+        source ./${step}.sh
         echo End: ${OsName}: ${step}
         echo
     done
-    sync 
+    sync
     cd "${StartDir}"
 done
 
-say create storage partition 
+say create storage partition
 newpart ${storagesize} fat EZSTORAGE
 Storagemount="${StartDir}/tmp/storage.tmpmnt"
 
-[[ -d commonStoragefiles ]] && say fill storage partition 
+[[ -d commonStoragefiles ]] && say fill storage partition
 [[ -d commonStoragefiles ]] && mkdir -p "${Storagemount}"
 [[ -d commonStoragefiles ]] && sudo mount ${ImgLodev}p${partcount} "${Storagemount}"
 [[ -d commonStoragefiles ]] && sudo cp -R commonStoragefiles/* "${Storagemount}" || echo >/dev/null 2>&1

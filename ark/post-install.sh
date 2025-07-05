@@ -2,8 +2,9 @@
 say Post-installing ark to ${imgname}
 
 sayin copy firstrun script
-sudo cp "firstboot.sh" "${ImgBootMnt}"
-sudo cp "ark-firstrun.sh" "${ImgBootMnt}"
+sudo cp "firstboot.sh" "${ImgBootMnt}/ark"
+sudo sed -i 's|ExecStart=/boot/firstboot.sh|ExecStart=/boot/ark/firstboot.sh|' "${DestMnt}/etc/systemd/system/firstboot.service"
+sudo cp "ark-firstrun.sh" "${ImgBootMnt}/ark"
 
 sayin copy fstab
 sudo cp --remove-destination "ark.fstab" "${DestMnt}/etc/fstab"
@@ -30,8 +31,9 @@ sudo cp "setup-ezstorage.service" "${DestMnt}/etc/systemd/system/"
 
 sayin cleanup mounts and img dev
 sync
-sudo umount ${arklodev}p1 
-sudo umount ${arklodev}p2 
+sleep 5
+sudo umount ${arklodev}p1
+sudo umount ${arklodev}p2
 sudo umount ${InstallDev}
 
 sync

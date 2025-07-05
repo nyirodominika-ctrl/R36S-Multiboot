@@ -28,9 +28,11 @@ sudo cp "${arkBootMnt}/uInitrd" "${ImgBootMnt}/"
 
 sudo cp -R "boot.ark.ini" "${ImgBootMnt}/"
 
+sudo mkdir -p "${ImgBootMnt}/ark"
 for i in 0 1 2 3 4
 do
-    sudo cp "${arkBootMnt}/ScreenFiles/Panel $i/rk3326-r35s-linux.dtb" "${ImgBootMnt}/ScreenFiles/Panel $i"
+    sudo mkdir -p "${ImgBootMnt}/ark/ScreenFiles/Panel $i"
+    sudo cp "${arkBootMnt}/ScreenFiles/Panel $i/rk3326-r35s-linux.dtb" "${ImgBootMnt}/ark/ScreenFiles/Panel $i"
 done
 
 DestMnt=${tmpmnts}/${imgname}-ark

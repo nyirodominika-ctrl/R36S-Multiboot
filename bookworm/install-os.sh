@@ -26,6 +26,12 @@ sayin copy boot files to ${imgname}
 sudo cp "boot.armbian.ini" "${ImgBootMnt}/boot.${OsName}.ini"
 sudo sed -i "s|###rootPartNum###|${partcount}|g" "${ImgBootMnt}/boot.${OsName}.ini"
 
+for i in {0..4}
+do
+    [[ ! -d "${ImgBootMnt}/ScreenFiles/Panel $i/" ]] && sudo mkdir "${ImgBootMnt}/ScreenFiles/Panel $i/"
+    [[ ! -f "${ImgBootMnt}/ScreenFiles/Panel $i/mipi-panel.dtbo" ]] && sudo cp -vf "$StartDir/mipi-panels/Panel $i/mipi-panel.dtbo" "${ImgBootMnt}/ScreenFiles/Panel $i/"
+done
+
 sayin copy root to ${imgname}
 sudo rsync -aHAX --no-compress ${armbianRootMnt}/ ${DestMnt} >/dev/null 2>&1
 
