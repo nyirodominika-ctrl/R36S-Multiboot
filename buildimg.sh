@@ -193,7 +193,7 @@ sleep 3
 say fill boot partition
 sudo cp -R commonbootfiles/* "${ImgBootMnt}"
 # definitely not proprietary files
-[[ "$BuildImgEnv" == "github" ]] && cat asset-{a,b,c}.tar.xz | xz -d -c > "${StartDir}/EZ/asset-b.tar"
+[[ "$BuildImgEnv" == "github" ]] && cat "${StartDir}/EZ/asset-{a,b,c}.tar.xz" | xz -d -c > "${StartDir}/EZ/asset-b.tar"
 [[ "$BuildImgEnv" == "github" ]] && sudo tar -xf "${StartDir}/EZ/asset-b.tar" -C "${StartDir}/EZ/EZStorage_all/$w$h$a$t"
 sudo tar -cf "${ImgBootMnt}/EZStorage_all.tar" -C "${StartDir}/EZ" EZStorage_all
 sudo cp -R "${StartDir}/EZ/setup-ezstorage.sh" "${ImgBootMnt}/setup-ezstorage.sh"
