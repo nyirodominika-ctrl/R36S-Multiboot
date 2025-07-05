@@ -2,13 +2,14 @@
 
 if [[ ! -f "$ThisImgName" ]]
 then
-    ArkOSdl=https://github.com/AeolusUX/ArkOS-R3XS/releases/download/ArkOS.V2.0.05312025/ArkOS_R35S-R36S_v2.0_05312025_MultiPanel.img.7z
+    ArkOSdl=https://github.com/AeolusUX/ArkOS-R3XS/releases/download/ArkOS.V2.0.06302025/ArkOS_R35S-R36S_v2.0_06302025_MultiPanel.img.7z
     [[ -f "ArkOS_R35S-R36S.img.7z.001" ]] && rm ArkOS_R35S-R36S.img.7z.001 || echo >/dev/null 2>&1
     [[ -f "ArkOS_R35S-R36S.img.7z" ]] && rm ArkOS_R35S-R36S.img.7z || echo >/dev/null 2>&1
     [[ -f "ArkOS_R35S-R36S.img" ]] && rm ArkOS_R35S-R36S.img || echo >/dev/null 2>&1
-    rm ArkOS_R35S-R36S_*.img || echo >/dev/null 2>&1
+    rm ArkOS_R35S-R36S_*.img || true
     ArkOSdl1=${ArkOSdl}.001
     #echo $ArkOSdl1
+    echo "Downloading ArkOS R35S-R36S image..."
     wget --no-verbose --quiet -OArkOS_R35S-R36S.img.7z.001 "$ArkOSdl1"
 
     [[ -f "ArkOS_R35S-R36S.img.7z.002" ]] && rm ArkOS_R35S-R36S.img.7z.002
