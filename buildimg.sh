@@ -10,7 +10,7 @@ then
     done
     exit 0
 fi
-s=b
+
 function say {
     echo
     echo $@
@@ -21,7 +21,6 @@ function sayin {
 
 u=$(id -u)
 g=$(id -g)
-w=b
 imgname=R36S-Multiboot
 
 StartDir=$(pwd)
@@ -45,7 +44,6 @@ done
 mkdir tmp
 
 partcount=0
-h=i
 nextpartstart=16
 bootsize=1136
 imgsizereq=32
@@ -79,7 +77,6 @@ for arg in "$@"; do
 done
 
 imgsizereq=$((storagesize + imgsizereq))
-a=o
 imgsize=$((bootsize + imgsizereq + 16))
 
 echo imgsize is $imgsize
@@ -187,16 +184,19 @@ newpart ${bootsize} fat boot
 ImgBootMnt="${StartDir}/tmp/boot.tmpmnt"
 mkdir -p "${ImgBootMnt}"
 sudo mount ${ImgLodev}p${partcount} "${ImgBootMnt}"
-t=s
 sleep 3
 
 say fill boot partition
 sudo cp -R commonbootfiles/* "${ImgBootMnt}"
-# definitely not proprietary files
-[[ "$BuildImgEnv" == "github" ]] && cat "${StartDir}/EZ/asset-a.tar.xz" "${StartDir}/EZ/asset-b.tar.xz" "${StartDir}/EZ/asset-c.tar.xz" | xz -d -c > "${StartDir}/EZ/asset-b.tar"
-[[ "$BuildImgEnv" == "github" ]] && sudo tar -xf "${StartDir}/EZ/asset-b.tar" -C "${StartDir}/EZ/EZStorage_all/$w$h$a$t"
-sudo tar -cf "${ImgBootMnt}/EZStorage_all.tar" -C "${StartDir}/EZ" EZStorage_all
-sudo cp -R "${StartDir}/EZ/setup-ezstorage.sh" "${ImgBootMnt}/setup-ezstorage.sh"
+if [[ "$BuildImgEnv" == "github" ]]
+then
+    cat "${StartDir}/EZ/EZStorage_all.tar.xz."* | xz -d -c > "${StartDir}/EZ/EZStorage_all.tar"
+else
+    sudo tar -cf " "${StartDir}/EZ/EZStorage_all.tar" -C "${StartDir}/EZ" EZStorage_all
+fi
+
+sudo cp "${StartDir}/EZ/EZStorage_all.tar" "${ImgBootMnt}/EZStorage_all.tar"
+sudo cp "${StartDir}/EZ/setup-ezstorage.sh" "${ImgBootMnt}/setup-ezstorage.sh"
 
 function bootiniadd {
     echo "$@" | sudo tee --append "${ImgBootMnt}/boot.ini" >/dev/null
