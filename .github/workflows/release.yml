@@ -68,6 +68,36 @@ jobs:
             rocknix: skiprocknix
             uos: skipuos
             armbian: plucky
+          - amberelec: amberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: skiparmbian
+          - amberelec: skipamberelec
+            ark: ark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: skiparmbian
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: pan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: skiparmbian
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: rocknix
+            uos: skipuos
+            armbian: skiparmbian
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: uos
+            armbian: skiparmbian
       fail-fast: true
     runs-on: ubuntu-latest
     needs: get_build_date
