@@ -21,19 +21,19 @@
 ## Multiboot Buttons
 ```
 
-#    Down       =   Rocknix
-#    Left       =   PAN4ELEC
-#    Up         =   UnofficialOS
-#    Right      =   Amberelec
+#b13 Down       =   UnofficialOS
+#b14 Left       =   PAN4ELEC
+#b12 Up         =   Rocknix
+#b15 Right      =   Amberelec
 
-#    Function   =   <Empty>
-#    Start (+)  =   ArkOS
-#    Select (-) =   <Empty>
+#c4  Function   =   <Empty>
+#d12 Start (+)  =   ArkOS
+#d9  Select (-) =   <Empty>
 
-#    B (south)  =   Armbian Bookworm
-#    Y (west)   =   Armbian Jammy
-#    X (north)  =   Armbian Noble
-#    A (east)   =   Armbian Plucky (TODO: armbian to one button after testing)
+#b5  B (south)  =   Armbian Bookworm
+#b6  Y (west)   =   Armbian Jammy
+#b7  X (north)  =   Armbian Noble
+#b2  A (east)   =   Armbian Plucky (TODO: armbian to one button after testing)
 
 
 # # # # # # # # # # # # # # # # # # # #
@@ -48,14 +48,14 @@
 # |                                 | #
 # |_________________________________| #
 #                                     #
-#         1              Noble        #
+#      Rocknix           Noble        #
 #         ▲               (X)         #
-#     4 ◄   ► 2    Jammy(Y) (A)Plucky #
+#   PAN4◄   ►Amber Jammy(Y) (A)Plucky #
 #         ▼               (B)         #
-#         3      (Fn)    Bookworm     #
+#        UOS     (Fn)   Bookworm      #
 #         _                _          #
 #       /   \  (-)  (+)  /   \        #
-#      |     | Roc  Ark |     |       #
+#      |     |      Ark |     |       #
 #       \ _ /            \ _ /        #
 #                                     #
 # # # # # # # # # # # # # # # # # # # #

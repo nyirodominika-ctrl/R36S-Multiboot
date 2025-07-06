@@ -1,18 +1,20 @@
 #!/bin/bash
 say Post-installing ${OsName} to ${imgname}
 
-
-
 sayin mount ${ThisRootDev} "${DestMnt}"
 DestMnt=${tmpmnts}/${imgname}-${OsName}
 mkdir -p "${DestMnt}"
 sudo mount ${ThisRootDev} "${DestMnt}"
 
+if [[ -f ez.service ]]
+then
+    sudo mkdir -p "${DestMnt}/.config/system.d/amberelec.target.wants/"
+    sudo cp -vL ez.service "${DestMnt}/.config/system.d/ez.service"
+    sudo ln -sr "${DestMnt}/.config/system.d/ez.service" "${DestMnt}/.config/system.d/amberelec.target.wants/ez.service"
+    sudo chmod a+x "${DestMnt}/.config/system.d/ez.service"
+fi
+
 sudo mkdir -p "${DestMnt}/.config/autostart"
-
-[[ -f custom_start.sh ]] && sudo cp -vL custom_start.sh "${DestMnt}/.config/custom_start.sh"
-[[ -f custom_start.sh ]] && sudo chmod a+x "${DestMnt}/.config/custom_start.sh"
-
 sudo cp -vL 00-mount-EZSTORAGE.sh "${DestMnt}/.config/autostart/00-mount-EZSTORAGE.sh"
 sudo chmod a+x "${DestMnt}/.config/autostart/00-mount-EZSTORAGE.sh"
 

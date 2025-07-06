@@ -11,5 +11,6 @@ fi
 
 if [[ "$OsName" == "amberelec" ]] || [[ "$OsName" == "pan4elec" ]]
 then
+    [[ -L /storage/roms ]] && rm -f /storage/roms
     /bin/bash /flash/u-boot/setup-ezstorage.sh $OsName /storage/roms /storage/EZSTORAGE
 fi

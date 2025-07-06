@@ -1,1 +1,0 @@
-../amberelec/custom_start.sh

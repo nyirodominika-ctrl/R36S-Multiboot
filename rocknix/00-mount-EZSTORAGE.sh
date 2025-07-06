@@ -17,6 +17,15 @@ do
         done
 done
 
+for i in $(find /var/media/*)
+do
+        while :
+        do
+                mount |grep "$i" >/dev/null 2>&1 || break
+                umount $i 2>&1
+        done
+done
+
 [[ ! -d /storage/EZSTORAGE ]] && mkdir /storage/EZSTORAGE
 mount -t vfat -o umask=000,noatime ${EZSDevPart} /storage/EZSTORAGE
 
