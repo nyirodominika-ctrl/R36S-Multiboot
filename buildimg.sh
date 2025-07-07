@@ -207,7 +207,11 @@ bootiniadd odroidgoa-uboot-config
 bootiniadd ""
 bootiniadd setenv boot2 $1
 bootiniadd ""
-
+bootiniadd 'if env exist Stickyboot2'
+bootiniadd 'then'
+bootiniadd '    setenv boot2 ${Stickyboot2}'
+bootiniadd 'fi'
+bootiniadd ""
 for arg in "$@"; do
     thisbtn=$(cat $arg/bootbutton)
     bootiniadd if gpio input $thisbtn
@@ -217,7 +221,15 @@ for arg in "$@"; do
     bootiniadd ""
 done
 
+bootiniadd 'if gpio input c4'
+bootiniadd 'then'
+bootiniadd '    setenv Stickyboot2 ${boot2}'
+bootiniadd '    saveenv'
+bootiniadd 'fi'
+bootiniadd ""
+
 bootiniadd 'echo booting ${boot2}'
+bootiniadd 'mw 0x00800800 ffffffff 0x1000'
 bootiniadd 'load mmc 1:1 0x00800800 boot.${boot2}.ini'
 bootiniadd source 0x00800800
 

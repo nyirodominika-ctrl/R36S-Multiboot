@@ -1,0 +1,24 @@
+## gpio button list ##
+# Power     =   a16
+
+# Vol+      =   c0
+# Vol-      =   c1
+
+# Func      =   c4
+# Start     =   d12
+# Select    =   d9
+
+# X (north) =   b7
+# Y (west)  =   b6
+# A (east)  =   b2
+# B (south) =   b5
+
+# Up        =   b12
+# Down      =   b13
+# Left      =   b14
+# Right     =   b15
+
+# R1        =   c7
+# R2        =   d15
+# L1        =   c6
+# L2        =   d10
