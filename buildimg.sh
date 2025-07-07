@@ -192,8 +192,9 @@ if [[ "$BuildImgEnv" == "github" ]]
 then
     cat "${StartDir}/EZ/EZStorage_all.tar.xz."* | xz -d -c > "${StartDir}/EZ/EZStorage_all.tar"
 else
-    sudo tar -cf "${StartDir}/EZ/EZStorage_all.tar" -C "${StartDir}/EZ" EZStorage_all
+    tar -cf "${StartDir}/EZ/EZStorage_all.tar" -C "${StartDir}/EZ" EZStorage_all
 fi
+# tar --exclude='*/gb/*.zip' -c EZStorage_all |xz -z -e -9 -T0 |split -b 95m - EZStorage_all.tar.xz.
 
 sudo cp "${StartDir}/EZ/EZStorage_all.tar" "${ImgBootMnt}/EZStorage_all.tar"
 sudo cp "${StartDir}/EZ/setup-ezstorage.sh" "${ImgBootMnt}/setup-ezstorage.sh"

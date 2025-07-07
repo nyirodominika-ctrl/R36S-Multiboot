@@ -63,6 +63,7 @@ makedir() {
 # check if FullEZRomsDir exists
 if [[ ! -d "$FullEZRomsDir" ]]
 then
+    echo "  first boot! will take some time, be patient." >>/dev/tty1
     # create FullEZRomsDir if it does not exist
     echo "FullEZRomsDir does not exist: $FullEZRomsDir"
     echo "Creating FullEZRomsDir: $FullEZRomsDir"
@@ -77,7 +78,7 @@ then
     echo "Extracting EZStorage_all from boot device: $BootDir"
     tar --no-same-permissions --no-same-owner -xf "${BootDir}/EZStorage_all.tar" -C "$FullEZRomsDir" EZStorage_all --strip-components=1
     find "$FullEZRomsDir" -type d | while read -r dir; do
-        # Replace $FullEZRomsDir with your target base directory, e.g., $EZRomsDir/SomeTarget
+        # Replace $FullEZRomsDir with target base directory
         target_dir="${dir/$FullEZRomsDir/$EZRomsDir}"
         mkdir -p "$target_dir"
     done

@@ -1,15 +1,15 @@
 [Unit]
 Description=AmberELEC EZStorage Setup
-Before=emulationstation.service
-After=graphical.target
+Before=emulationstation.service graphical.target
+RequiredBy=emulationstation.service graphical.target
 
 [Service]
 Type=oneshot
 Environment=HOME=/storage
-ExecStartPre=/bin/bash /storage/.config/autostart/00-mount-EZSTORAGE.sh
-ExecStartPre=/bin/bash /storage/.config/autostart/01-expand-EZSTORAGE.sh
+ExecStart=/bin/bash /storage/.config/autostart/00-mount-EZSTORAGE.sh
+ExecStart=/bin/bash /storage/.config/autostart/01-expand-EZSTORAGE.sh
 ExecStart=/bin/bash /storage/.config/autostart/02-setup-EZSTORAGE.sh
 RemainAfterExit=yes
 
 [Install]
-WantedBy=amberelec.target
+WantedBy=graphical.target

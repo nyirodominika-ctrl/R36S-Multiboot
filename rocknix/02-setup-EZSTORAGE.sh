@@ -1,6 +1,13 @@
 #!/bin/bash
+sleep 1
+while [[ -f /storage/expanding.EZSTORAGE ]]
+do
+    sleep 4
+done
+echo "  Setting up EZSTORAGE folders and mounts..." >>/dev/tty1
+OsName=$(for i in $(cat /proc/cmdline); do [[ "$i" == "disk=LABEL="* ]] && (echo $i|cut -d'=' -f3); [[ "$i" == "disk=LABEL="* ]] && break; done)
 
-OsName=$(for i in $(cat /proc/cmdline); do [[ "$i" == "disk=LABEL="* ]] && (echo $i|cut -d'=' -f3 ; break); done)
+[[ -L /storage/roms ]] && rm -f /storage/roms
 
 if [[ "$OsName" == "rocknix" ]] || [[ "$OsName" == "uos" ]]
 then
@@ -11,6 +18,5 @@ fi
 
 if [[ "$OsName" == "amberelec" ]] || [[ "$OsName" == "pan4elec" ]]
 then
-    [[ -L /storage/roms ]] && rm -f /storage/roms
     /bin/bash /flash/u-boot/setup-ezstorage.sh $OsName /storage/roms /storage/EZSTORAGE
 fi

@@ -6,12 +6,14 @@ DestMnt=${tmpmnts}/${imgname}-${OsName}
 mkdir -p "${DestMnt}"
 sudo mount ${ThisRootDev} "${DestMnt}"
 
-if [[ -f ez.service ]]
+if [[ -e ez.service ]]
 then
-    sudo mkdir -p "${DestMnt}/.config/system.d/amberelec.target.wants/"
+    sudo mkdir -p "${DestMnt}/.config/system.d/graphical.target.wants"
+    # sudo mkdir -p "${DestMnt}/.config/system.d/emustation.service.d"
     sudo cp -vL ez.service "${DestMnt}/.config/system.d/ez.service"
-    sudo ln -sr "${DestMnt}/.config/system.d/ez.service" "${DestMnt}/.config/system.d/amberelec.target.wants/ez.service"
+    sudo ln -sr "${DestMnt}/.config/system.d/ez.service" "${DestMnt}/.config/system.d/graphical.target.wants/ez.service"
     sudo chmod a+x "${DestMnt}/.config/system.d/ez.service"
+
 fi
 
 sudo mkdir -p "${DestMnt}/.config/autostart"

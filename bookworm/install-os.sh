@@ -24,7 +24,10 @@ sudo mount ${InstallDev} "${DestMnt}"
 sayin copy boot files to ${imgname}
 
 sudo cp "boot.armbian.ini" "${ImgBootMnt}/boot.${OsName}.ini"
-sudo sed -i "s|###rootPartNum###|${partcount}|g" "${ImgBootMnt}/boot.${OsName}.ini"
+ThisRootPartNumHex=$(printf '%x\n' ${partcount})
+sudo sed -i "s|###rootPartNum###|${ThisRootPartNumHex}|g" "${ImgBootMnt}/boot.${OsName}.ini"
+sudo sed -i "s|root=LABEL=armbian|root=LABEL=${OsName}|g" "${ImgBootMnt}/boot.${OsName}.ini"
+root=LABEL=armbian
 
 for i in {0..4}
 do

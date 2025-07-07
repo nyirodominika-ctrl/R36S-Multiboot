@@ -29,7 +29,8 @@ sudo mount ${Thislodev}p1 "${OSBootMnt}"
 
 sayin copy boot files to ${imgname}
 sudo cp -v "boot.${OsName}.ini" "${ImgBootMnt}/boot.${OsName}.ini"
-sudo sed -i "s|###bootPartNum###|${ThisBootPartNum}|g" "${ImgBootMnt}/boot.${OsName}.ini"
+ThisBootPartNumHex=$(printf '%x\n' ${ThisBootPartNum})
+sudo sed -i "s|###bootPartNum###|${ThisBootPartNumHex}|g" "${ImgBootMnt}/boot.${OsName}.ini"
 
 # mount boot partition
 DestBootMnt=${tmpmnts}/boot-${OsName}
