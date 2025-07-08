@@ -4,13 +4,11 @@
 
 # Gameconsole R36S Multiboot images (and builder)
 
-## \#\#\# WIP \#\#\#
-
 ### Notes
-- Nothing is fully ready yet, expect problems
 - Armbian standalone images are at [R36S-Stuff](https://github.com/R36S-Stuff/R36S-Armbian/releases/latest)
 - Image(s) are big and most likely split into parts for github release.
-    - [get all the numbered files (.001, etc)](https://r36s-stuff.github.io/R36S-Multiboot) and extract it with 7zip or nanaZip. (linux users, ive found p7zip to be unreliabe, try the official 7zip if you have issues.)
+    - [get all the numbered files from the dl page(.001, .002, etc)](https://r36s-stuff.github.io/R36S-Multiboot) and extract it with 7zip or nanaZip.
+    - (linux users, ive found p7zip to be unreliabe, try the official 7zip if you have issues.)
 
 ### Builder info
 - builds in WSL
@@ -19,22 +17,27 @@
 - can build single boot images for testing (or just u-boot with no OS arguments)
 
 ## Multiboot Buttons
+
+hold a face button while booting to boot another OS.
+
+Hold function with a face buttone for sticky boot, that os becomes the new default.
+
 ```
+# GPIO  Button     =   OS
 
-#b13 Down       =   UnofficialOS
-#b14 Left       =   PAN4ELEC
-#b12 Up         =   Rocknix
-#b15 Right      =   Amberelec
+# b12   Up         =   UnofficialOS
+# b13   Down       =   Rocknix
+# b15   Right      =   Amberelec
+# b14   Left       =   PAN4ELEC
 
-#c4  Function   =   <Empty>
-#d12 Start (+)  =   ArkOS
-#d9  Select (-) =   <Empty>
+# c4    Function   =   <Empty>
+# d12   Start (+)  =   ArkOS
+# d9    Select (-) =   <Empty>
 
-#b5  B (south)  =   Armbian Bookworm
-#b6  Y (west)   =   Armbian Jammy
-#b7  X (north)  =   Armbian Noble
-#b2  A (east)   =   Armbian Plucky (TODO: armbian to one button after testing)
-
+# b5    B (south)  =   Armbian Bookworm
+# b6    Y (west)   =   Armbian Jammy
+# b7    X (north)  =   Armbian Noble
+# b2    A (east)   =   Armbian Plucky (TODO: move armbian to one button after a few betas)
 
 # # # # # # # # # # # # # # # # # # # #
 #  _________________________________  #
@@ -48,22 +51,22 @@
 # |                                 | #
 # |_________________________________| #
 #                                     #
-#      Rocknix           Noble        #
+#        UOS             Noble        #
 #         ▲               (X)         #
 #   PAN4◄   ►Amber Jammy(Y) (A)Plucky #
 #         ▼               (B)         #
-#        UOS     (Fn)   Bookworm      #
-#         _                _          #
-#       /   \  (-)  (+)  /   \        #
-#      |     |      Ark |     |       #
-#       \ _ /            \ _ /        #
+#      Rocknix   (Fn)   Bookworm      #
+#         _     Sticky     _          #
+#       /   \            /   \        #
+#      |     | (-)  (+) |     |       #
+#       \ _ /       Ark  \ _ /        #
 #                                     #
 # # # # # # # # # # # # # # # # # # # #
 ```
 
 
 # black screen?
-# Panel Chooser info
+## Panel Chooser info
 
 These images support the original R36S panel, and the 4 new panels, all in one image!
 
@@ -98,7 +101,7 @@ These images support the original R36S panel, and the 4 new panels, all in one i
 #                                     #
 #         1                           #
 #         ▲               (X)         #
-#     4 ◄   ► 2         (Y) (A)Orig   #
+#     4 ◄   ► 2         (Y) (A) Orig  #
 #         ▼               (B)         #
 #         3                           #
 #         _                _          #

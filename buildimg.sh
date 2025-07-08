@@ -110,7 +110,7 @@ then
     say get u-boot
     mkdir u-boot
     cd u-boot
-    wget https://github.com/R36S-Stuff/R36S-u-boot-builder/releases/download/rc2-pancho/u-boot-r36s.tar
+    wget https://github.com/R36S-Stuff/R36S-u-boot-builder/releases/download/v1/u-boot-r36s.tar
     cd ..
 fi
 cd u-boot
