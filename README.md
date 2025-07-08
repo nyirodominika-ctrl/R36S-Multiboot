@@ -4,18 +4,6 @@
 
 # Gameconsole R36S Multiboot images (and builder)
 
-### Notes
-- Armbian standalone images are at [R36S-Stuff](https://github.com/R36S-Stuff/R36S-Armbian/releases/latest)
-- Image(s) are big and most likely split into parts for github release.
-    - [get all the numbered files from the dl page(.001, .002, etc)](https://r36s-stuff.github.io/R36S-Multiboot) and extract it with 7zip or nanaZip.
-    - (linux users, ive found p7zip to be unreliabe, try the official 7zip if you have issues.)
-
-### Builder info
-- builds in WSL
-- might need dependencies to be installed (i will do this automatically later)
-- syntax: `./buildimg ark rocknix armbian <name-of-os-folder-NO-SPACES>`
-- can build single boot images for testing (or just u-boot with no OS arguments)
-
 ## Multiboot Buttons
 
 hold a face button while booting to boot another OS.
@@ -27,10 +15,10 @@ Hold function with a face buttone for sticky boot, that os becomes the new defau
 
 # b12   Up         =   UnofficialOS
 # b13   Down       =   Rocknix
-# b15   Right      =   Amberelec
+# b15   Right      =   AmberELEC
 # b14   Left       =   PAN4ELEC
 
-# c4    Function   =   <Empty>
+# c4    Function   =   Set sticky boot
 # d12   Start (+)  =   ArkOS
 # d9    Select (-) =   <Empty>
 
@@ -112,3 +100,21 @@ These images support the original R36S panel, and the 4 new panels, all in one i
 # # # # # # # # # # # # # # # # # # # #
 ```
 
+### TODO
+- test ota updates per os
+- set wifi on all oses from boot partition
+- SD2 ezrom support. (dont try for now, will probably explode or something?)
+- 
+
+### Notes
+- Armbian standalone images are at [R36S-Stuff](https://github.com/R36S-Stuff/R36S-Armbian/releases/latest)
+- Image(s) are big and most likely split into parts for github release.
+    - [get all the numbered files from the dl page(.001, .002, etc)](https://r36s-stuff.github.io/R36S-Multiboot) and extract it with 7zip or nanaZip.
+    - (linux users, ive found p7zip to be unreliabe, try the official 7zip if you have issues.)
+
+### Builder info
+- syntax: `./buildimg ark rocknix armbian <name-of-os-folder-NO-SPACES>`
+- I build in WSL
+- ~~might need dependencies to be installed (i will do this automatically later)~~ 
+    - should be fine now?
+- can build single boot images for testing (or just u-boot with no OS arguments)
