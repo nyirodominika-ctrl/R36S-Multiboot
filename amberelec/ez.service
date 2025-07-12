@@ -1,15 +1,18 @@
 [Unit]
-Description=AmberELEC EZStorage Setup
-Before=emulationstation.service graphical.target
-RequiredBy=emulationstation.service graphical.target
+Description=EZStorage Setup
+Before=rocknix-autostart.service unofficialos-autostart.service amberelec-autostart.service
 
 [Service]
 Type=oneshot
 Environment=HOME=/storage
-ExecStart=/bin/bash /storage/.config/autostart/00-mount-EZSTORAGE.sh
-ExecStart=/bin/bash /storage/.config/autostart/01-expand-EZSTORAGE.sh
-ExecStart=/bin/bash /storage/.config/autostart/02-setup-EZSTORAGE.sh
 RemainAfterExit=yes
+Restart=no
+
+ExecStart=/usr/bin/bash /storage/.config/ez/00-mount-EZSTORAGE.sh > /storage/00-mount-EZSTORAGE.txt 2>&1
+ExecStart=/usr/bin/bash /storage/.config/ez/01-expand-EZSTORAGE.sh > /storage/01-expand-EZSTORAGE.txt 2>&1
+ExecStart=/usr/bin/bash /storage/.config/ez/02-setup-EZSTORAGE.sh > /storage/02-setup-EZSTORAGE.txt 2>&1
+
+ExecStop=/bin/bash /flash/u-boot/umount-ez.sh
 
 [Install]
-WantedBy=graphical.target
+WantedBy=rocknix-autostart.service unofficialos-autostart.service amberelec-autostart.service

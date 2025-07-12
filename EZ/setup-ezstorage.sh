@@ -4,13 +4,23 @@ OSRomsDir=$2
 EZRomsDir=$3
 
 debug=false
+OsName=$OS
+
+if [[ "$OsName" == "rocknix" ]] || [[ "$OsName" == "uos" ]]
+then
+    ttySpacing="\r\033[K\r==> "
+    ttyEndChar="\r"
+else
+    ttySpacing="  "
+    ttyEndChar="\n"
+fi
+#echo -ne "${ttySpacing}
 
 # Exit if cant get root
 if [ "$(id -u)" -ne 0 ]; then
     echo "This script must be run as root, relaunching with sudo"
     exec sudo "$0" "$@"
     [[ $? -ne 0 ]] && exit 1
-
 fi
 
 if [[ "$4" = "debug" ]]
@@ -39,114 +49,95 @@ then
     echo "EZRomsDir does not exist: $EZRomsDir"
     exit 1
 fi
+
 # check if EZRomsDir is mounted
-if [[ ! -d "$EZRomsDir" ]]
+if ! grep $EZRomsDir /proc/mounts
 then
     echo "EZRomsDir is not mounted: $EZRomsDir"
     exit 1
 fi
 
-movefile() {
-    local src="$1"
-    local dest="$1"
-    dest=$(echo "$dest" | sed "s|$FullEZRomsDir|$EZRomsDir|g")
-    mv "$src" "$dest"
-}
-
-makedir() {
-    local dest="$1"
-    dest=$(echo "$dest" | sed "s|$FullEZRomsDir|$EZRomsDir|g")
-    echo
-    mkdir -p "$dest"
-}
+# check if extraction was interrupted
+if [[ -d "$FullEZRomsDir" ]] && [[ ! -f "$EZRomsDir/.DontModify/EZStorage.configured" ]]
+then
+    rm -rf $FullEZRomsDir
+fi
 
 # check if FullEZRomsDir exists
 if [[ ! -d "$FullEZRomsDir" ]]
 then
-    echo "  first boot! will take some time, be patient." >>/dev/tty1
+    echo -ne "${ttySpacing}First boot! Will take some time, be patient.${ttyEndChar}" >>/dev/tty1
     # create FullEZRomsDir if it does not exist
     echo "FullEZRomsDir does not exist: $FullEZRomsDir"
     echo "Creating FullEZRomsDir: $FullEZRomsDir"
     mkdir -p "$FullEZRomsDir"
     # use script directory as BootDir
     BootDir=$(dirname "$(readlink -f "$0")")
-    if [[ ! -f "${BootDir}/EZStorage_all.tar" ]] 
+    if [[ ! -f "${BootDir}/EZStorage_all.tar" ]]
     then
         echo "EZStorage_all.tar not found in $BootDir"
         exit 1
     fi
     echo "Extracting EZStorage_all from boot device: $BootDir"
     tar --no-same-permissions --no-same-owner -xf "${BootDir}/EZStorage_all.tar" -C "$FullEZRomsDir" EZStorage_all --strip-components=1
-    find "$FullEZRomsDir" -type d | while read -r dir; do
-        # Replace $FullEZRomsDir with target base directory
-        target_dir="${dir/$FullEZRomsDir/$EZRomsDir}"
-        mkdir -p "$target_dir"
+    find "$FullEZRomsDir" -mindepth 1 -maxdepth 1 -type d | while read -r dir; do
+        mkdir -p "${dir/$FullEZRomsDir/$EZRomsDir}"
     done
-    # move files recursively from FullEZRomsDir to EZRomsDir 
-    echo "Moving files from FullEZRomsDir to EZRomsDir"
-    find "$FullEZRomsDir" -type f | while read -r file; do
-        if [[ "$file" == *"DO_NOT_USE.MappedTo"* ]] 
-        then
-            echo "Skipping mapped file: $file"
-            continue
-        fi
-        dest=$(echo "$file" | sed "s|$FullEZRomsDir|$EZRomsDir|g")
-        mv "$file" "$dest"
+    for localbuildteststuff in bios gb 00_Music 00_Videos
+    do
+        rm -rf $EZRomsDir/$localbuildteststuff
+        mv $FullEZRomsDir/$localbuildteststuff $EZRomsDir/$localbuildteststuff
+        mkdir -p $FullEZRomsDir/$localbuildteststuff
     done
-
+    touch $EZRomsDir/.DontModify/EZStorage.configured
     sync
     sleep 5
 fi
 
-Bind2OSRomsDir() {
+Bind2RomsDir() {
     local EZRomDir="$1"
-    local OSRomDir="$2"
+    local RomDir="$2"
     if [[ "$debug" = true ]]
     then
-        echo "Would bind EZRomDir: $EZRomDir to OSRomDir: $OSRomDir"
+        echo "Would bind EZRomDir: $EZRomDir to RomDir: $RomDir"
         echo "[[ ! -d \"$EZRomDir\" ]] && mkdir -p \"$EZRomDir\""
-        echo "[[ ! -d \"$OSRomDir\" ]] && mkdir -p \"$OSRomDir\""
-        echo mount --bind \"$EZRomDir\" \"$OSRomDir\"
+        echo "[[ ! -d \"$RomDir\" ]] && mkdir -p \"$RomDir\""
+        echo mount --bind \"$EZRomDir\" \"$RomDir\"
         echo
     else
-        echo "Binding EZRomDir: $EZRomDir to OSRomDir: $OSRomDir"
+        echo "Binding EZRomDir: $EZRomDir to RomDir: $RomDir"
         [[ ! -d "$EZRomDir" ]] && mkdir -p "$EZRomDir"
-        [[ ! -d "$OSRomDir" ]] && mkdir -p "$OSRomDir"
-        mount --bind "$EZRomDir" "$OSRomDir"
+        [[ ! -d "$RomDir" ]] && mkdir -p "$RomDir"
+        mount --bind "$EZRomDir" "$RomDir"
     fi
-
 }
 
-# if [[ "$OS" = "rocknix" ]]
-# then
-# 	mount --bind /storage/games-internal /storage/games-external
-# 	mount --bind /storage/games-external/roms /storage/roms
-#     #OSRomsDir=/storage/roms
-# fi
 
-#process mapped binds
+RomsDir=$OSRomsDir
+
+[[ ! -d "$RomsDir" ]] && mkdir -p "$RomsDir"
+# process mapped binds
 for maptype in Music Videos
 do
     for EZRomDir in $(find "$FullEZRomsDir" -type f -name "DO_NOT_USE.MappedTo-00_$maptype" -exec dirname {} \;)
     do
         EZRomDir=$(echo $EZRomDir|sed "s|$FullEZRomsDir|$EZRomsDir|g")
-        [[  "$EZRomDir" == *"_${OS}_"* ]] && Bind2OSRomsDir "$EZRomsDir/00_$maptype" "$EZRomDir"
+        [[  "$EZRomDir" == *"_${OS}_"* ]] && Bind2RomsDir "$EZRomsDir/00_$maptype" "$EZRomDir"
     done
 done
-
+# process binds
 for EZRomDir in $(find "$FullEZRomsDir" -mindepth 1 -maxdepth 1 -type d)
 do
     EZRomDir=$(echo $EZRomDir|sed "s|$FullEZRomsDir|$EZRomsDir|g")
     echo "Processing EZRomDir: $(basename $EZRomDir)"
-    if [[  "$(basename $EZRomDir)" == "_"* ]]; then
+    if [[ "$(basename $EZRomDir)" == "_"* ]]
+    then
         for RomDirName in $(find "$FullEZRomsDir/$(basename $EZRomDir)" -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
         do
-            [[ "$EZRomDir" == *"_${OS}_"* ]] && Bind2OSRomsDir "$EZRomDir/$RomDirName" "$OSRomsDir/$RomDirName"
+            [[ "$EZRomDir" == *"_${OS}_"* ]] && Bind2RomsDir "$EZRomDir/$RomDirName" "$RomsDir/$RomDirName"
             [[ ! "$EZRomDir" == *"_${OS}_"* ]] && [[ ! -d "$EZRomDir/$RomDirName" ]] && [[ "$debug" = false ]] && mkdir -p "$EZRomDir/$RomDirName"
         done
     else
-        Bind2OSRomsDir "$EZRomDir" "$OSRomsDir/$(basename $EZRomDir)"
+        Bind2RomsDir "$EZRomDir" "$RomsDir/$(basename $EZRomDir)"
     fi
 done
-
-exit 0

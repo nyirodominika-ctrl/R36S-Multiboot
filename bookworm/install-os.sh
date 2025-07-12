@@ -5,11 +5,11 @@ npsz=$(cat sizereq)
 sayin new $((npsz/1024))GiB partition
 newpart $npsz ext4 $OsName
 InstallDev=${ImgLodev}p${partcount}
-sayin new root part is ${InstallDev} 
+sayin new root part is ${InstallDev}
 
 sayin setup mounts
 armbianRootMnt=${tmpmnts}/root
-mkdir -p "${armbianRootMnt}" 
+mkdir -p "${armbianRootMnt}"
 armbianlodev=$(losetup -f)
 sudo losetup -P ${armbianlodev} ${ThisImgName}
 sudo mount ${armbianlodev}p2 "${armbianRootMnt}"
@@ -27,7 +27,6 @@ sudo cp "boot.armbian.ini" "${ImgBootMnt}/boot.${OsName}.ini"
 ThisRootPartNumHex=$(printf '%x\n' ${partcount})
 sudo sed -i "s|###rootPartNum###|${ThisRootPartNumHex}|g" "${ImgBootMnt}/boot.${OsName}.ini"
 sudo sed -i "s|root=LABEL=armbian|root=LABEL=${OsName}|g" "${ImgBootMnt}/boot.${OsName}.ini"
-root=LABEL=armbian
 
 for i in {0..4}
 do

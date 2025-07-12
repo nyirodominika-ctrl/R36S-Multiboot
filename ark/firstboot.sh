@@ -1,2 +1,2 @@
 #!/bin/bash
-/bin/bash /boot/ark/ark-firstrun.sh > /dev/tty1 2>&1
+/bin/bash /boot/ark-firstrun.sh > /dev/tty1 2>&1

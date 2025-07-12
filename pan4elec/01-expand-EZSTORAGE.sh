@@ -1,1 +1,1 @@
-../rocknix/01-expand-EZSTORAGE.sh
+../amberelec/01-expand-EZSTORAGE.sh

@@ -1,1 +1,1 @@
-../rocknix/post-install.sh
+../amberelec/post-install.sh

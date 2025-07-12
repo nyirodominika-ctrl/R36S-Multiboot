@@ -32,7 +32,7 @@ do
     sudo umount "${mp}" && echo ${mp} was stll mounted || exit 1
 done
 
-[[ -d tmp ]] && rm -rf tmp || echo >/dev/null 2>&1
+[[ -d tmp ]] && rm -rf tmp || true
 [[ -d tmp ]] && exit 1
 
 for ld in $(losetup | grep "$(pwd)" |cut -d' ' -f1)
@@ -94,15 +94,15 @@ sudo losetup -P ${ImgLodev} ${BuildingImgFullPath}
 function refreshBuildimg {
     sync
     echo ► refresh ${ImgLodev}
-    [[ ! -z "${ImgBootMnt}" ]] && echo ►► umount "${ImgBootMnt}" || echo >/dev/null 2>&1
-    [[ ! -z "${ImgBootMnt}" ]] && sudo umount "${ImgBootMnt}" || echo >/dev/null 2>&1
+    [[ ! -z "${ImgBootMnt}" ]] && echo ►► umount "${ImgBootMnt}" || true
+    [[ ! -z "${ImgBootMnt}" ]] && sudo umount "${ImgBootMnt}" || true
     sudo losetup -d ${ImgLodev}
     sleep 3
     sync
     sudo losetup -P ${ImgLodev} ${BuildingImgFullPath}
     sleep 3
-    [[ ! -z "${ImgBootMnt}" ]] && echo ►► mount ${ImgLodev}p1 "${ImgBootMnt}" || echo >/dev/null 2>&1
-    [[ ! -z "${ImgBootMnt}" ]] && sudo mount ${ImgLodev}p1 "${ImgBootMnt}" || echo >/dev/null 2>&1
+    [[ ! -z "${ImgBootMnt}" ]] && echo ►► mount ${ImgLodev}p1 "${ImgBootMnt}" || true
+    [[ ! -z "${ImgBootMnt}" ]] && sudo mount ${ImgLodev}p1 "${ImgBootMnt}" || true
 }
 
 if [[ ! -d u-boot ]]
@@ -138,15 +138,16 @@ function newpart {
     local end=$((start + partsize))
     local ptype=notset
     echo ► create from ${start}MiB to ${end}MiB
-    [[ "$2" == "fat" ]] && local type=fat32 || echo >/dev/null 2>&1
-    [[ "$2" == "ext4" ]] && local type=ext4 || echo >/dev/null 2>&1
+    [[ "$2" == "fat" ]] && local type=fat32 || true
+    [[ "$2" == "ext4" ]] && local type=ext4 || true
+    [[ "$2" == "exfat" ]] && local type=fat32 || true
 
     [[ $partcount == 0 ]] && ptype=primary || ptype=logical
-    sudo parted -s ${ImgLodev} mkpart $ptype $type ${start}MiB ${end}MiB || echo >/dev/null 2>&1
+    sudo parted -s ${ImgLodev} mkpart $ptype $type ${start}MiB ${end}MiB || true
     refreshBuildimg
     ls ${ImgLodev}p$((partcount + 1)) >/dev/null 2>&1 && partcount=$((partcount + 1)) || exit 1
     nextpartstart=${end}
-    [[ "$ptype" == "logical" ]] && nextpartstart=$((nextpartstart+1)) || echo >/dev/null 2>&1
+    [[ "$ptype" == "logical" ]] && nextpartstart=$((nextpartstart+1)) || true
 
     if [[ "$2" == "fat" ]]
     then
@@ -159,6 +160,20 @@ function newpart {
             #echo
             echo ► format as fat with label $3
             sudo mkfs.vfat -F 32 -n $3 ${ImgLodev}p${partcount} >/dev/null 2>&1
+        fi
+    fi
+
+    if [[ "$2" == "exfat" ]]
+    then
+        if [[ -z "$3" ]]
+        then
+            #echo
+            echo ► format as exfat
+            sudo mkfs.exfat ${ImgLodev}p${partcount} >/dev/null 2>&1
+        else
+            #echo
+            echo ► format as fat with label $3
+            sudo mkfs.exfat -L $3 ${ImgLodev}p${partcount} >/dev/null 2>&1
         fi
     fi
 
@@ -176,7 +191,7 @@ function newpart {
         fi
     fi
     sync
-    [[ "$3" == "returndev" ]] && return "${ImgLodev}p${partcount}" || echo >/dev/null 2>&1
+    [[ "$3" == "returndev" ]] && return "${ImgLodev}p${partcount}" || true
 }
 
 say create boot partition
@@ -188,13 +203,18 @@ sleep 3
 
 say fill boot partition
 sudo cp -R commonbootfiles/* "${ImgBootMnt}"
+
+## Build local tar
+# tar -cvf EZStorage_all.tar EZStorage_all
+## Build gh tar.xz.*
+# tar --exclude="*/gb/*.zip" --exclude="*/bioa/*" --exclude="*/00_Videos/*" -c EZStorage_all | xz -z -e -9 -T0 | split -b 95m - EZStorage_all.tar.xz.
+
 if [[ "$BuildImgEnv" == "github" ]]
 then
     cat "${StartDir}/EZ/EZStorage_all.tar.xz."* | xz -d -c > "${StartDir}/EZ/EZStorage_all.tar"
 else
     tar -cf "${StartDir}/EZ/EZStorage_all.tar" -C "${StartDir}/EZ" EZStorage_all
 fi
-# tar --exclude='*/gb/*.zip' -c EZStorage_all |xz -z -e -9 -T0 |split -b 95m - EZStorage_all.tar.xz.
 
 sudo cp "${StartDir}/EZ/EZStorage_all.tar" "${ImgBootMnt}/EZStorage_all.tar"
 sudo cp "${StartDir}/EZ/setup-ezstorage.sh" "${ImgBootMnt}/setup-ezstorage.sh"
@@ -274,18 +294,18 @@ for arg in "$@"; do
 done
 
 say create storage partition
-newpart ${storagesize} fat EZSTORAGE
+newpart ${storagesize} exfat EZSTORAGE
 Storagemount="${StartDir}/tmp/storage.tmpmnt"
 
 [[ -d commonStoragefiles ]] && say fill storage partition
 [[ -d commonStoragefiles ]] && mkdir -p "${Storagemount}"
 [[ -d commonStoragefiles ]] && sudo mount ${ImgLodev}p${partcount} "${Storagemount}"
-[[ -d commonStoragefiles ]] && sudo cp -R commonStoragefiles/* "${Storagemount}" || echo >/dev/null 2>&1
+[[ -d commonStoragefiles ]] && sudo cp -R commonStoragefiles/* "${Storagemount}" || true
 
 say finalize image
 sync
 sudo umount "${ImgBootMnt}"
-[[ -d commonStoragefiles ]] && sudo umount "${Storagemount}" || echo >/dev/null 2>&1
+[[ -d commonStoragefiles ]] && sudo umount "${Storagemount}" || true
 sudo losetup -d ${ImgLodev}
 sync
 

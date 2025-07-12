@@ -15,32 +15,31 @@ width="60"
 #   dialog --infobox "debug expand file not found" $height $width 2>&1 > /dev/tty1
 # sleep 15
 
+export EZSDevPart=$(sudo blkid |grep EZSTORAGE | grep -v EZSTORAGE2 |cut -d: -f1)
+export EZSPartNum=$(echo ${EZSDevPart} | cut -dp -f2)
+export EZSDev=$(echo ${EZSDevPart} | cut -dp -f1)
+echo EZSTORAGE partition device is ${EZSDevPart};echo EZSTORAGE device is ${EZSDev} ;echo EZSTORAGE partition number is ${EZSPartNum}
+
 if [ $notExpanded -eq 1 ]
 then
-  sudo umount /EZSTORAGE
-  export EZSDevPart=$(sudo blkid |grep EZSTORAGE |cut -d: -f1)
-  export EZSPartNum=$(echo ${EZSDevPart} | cut -dp -f2)
-  export EZSDev=$(echo ${EZSDevPart} | cut -dp -f1)
-  echo EZSTORAGE partition device is ${EZSDevPart};echo EZSTORAGE device is ${EZSDev} ;echo EZSTORAGE partition number is ${EZSPartNum}
+  /bin/bash /boot/u-boot/umount-ez.sh
 
   if [ ! -f /boot/doneit ]; then
     sudo echo ", +" | sudo sfdisk -N 2 --force ${EZSDev}
     sudo echo ", +" | sudo sfdisk -N ${EZSPartNum} --force ${EZSDev}
     sudo touch "/boot/doneit"
-    dialog --infobox "EASYROMS partition expansion and conversion to exfat in process.  The device will now reboot to continue the process..." $height $width 2>&1 > /dev/tty1
+    sleep 10
+    dialog --infobox "EASYSTORAGE expansion in progress...\n  The device will now reboot to continue the process..." $height $width 2>&1 > /dev/tty1
     sleep 5
     sudo reboot
   fi
 
-  mkfs.fat -F32 -v -I -n EZSTORAGE ${EZSDevPart} || sleep 30
+  mkfs.exfat -n EZSTORAGE ${EZSDevPart} || sleep 300
   sync
-  sleep 2
-  sudo fsck.fat -a ${EZSDevPart}
-  sync
-
+  sleep 10
   sudo mount -w ${EZSDevPart} /EZSTORAGE
   exitcode=$?
-
+  sleep 10
   mkdir /EZSTORAGE/.DontModify
   sudo touch "/EZSTORAGE/.DontModify/storagewasexpanded"
 
@@ -51,7 +50,7 @@ fi
 sudo sed -i 's|##pre-firstrun##||' /etc/fstab
 sudo mount -a
 sleep 2
-sudo /bin/bash /boot/setup-ezstorage.sh ark /roms /EZSTORAGE || sleep 30
+sudo systemctl start ez.service
 sleep 5
 mount
 
@@ -70,10 +69,10 @@ sudo rm -f /boot/fstab.*
 
 sudo systemctl enable ssh
 if [ $exitcode -eq 0 ]; then
-  dialog --infobox "Completed expansion of EZSTORAGE. The system will now reboot and load ArkOS." $height $width 2>&1 > /dev/tty1 | sleep 10
+  dialog --infobox "Completed expansion of EZSTORAGE. The system will now reboot" $height $width 2>&1 > /dev/tty1 | sleep 10
   systemctl disable firstboot.service
   sudo systemctl disable firstboot.service
-  sudo systemctl enable setup-ezstorage.service
+  sudo systemctl enable ez.service
   #sudo rm -v /boot/ark/firstboot.sh
   #sudo rm -v /boot/ark-firstrun.sh
   sudo mv /boot/ark/firstboot.sh{,.ran}

@@ -1,1 +1,1 @@
-../rocknix/00-mount-EZSTORAGE.sh
+../amberelec/00-mount-EZSTORAGE.sh

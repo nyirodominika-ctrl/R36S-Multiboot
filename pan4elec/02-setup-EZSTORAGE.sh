@@ -1,1 +1,1 @@
-../rocknix/02-setup-EZSTORAGE.sh
+../amberelec/02-setup-EZSTORAGE.sh

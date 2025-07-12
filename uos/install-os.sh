@@ -1,1 +1,1 @@
-../rocknix/install-os.sh
+../amberelec/install-os.sh
