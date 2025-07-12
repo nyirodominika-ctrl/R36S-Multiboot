@@ -20,7 +20,7 @@ then
     rm ArkOS_R35S-R36S.img.7z.001 ArkOS_R35S-R36S.img.7z.002
     sync
     arkImg=$(find . |grep "ArkOS_R35S-R36S")
-    unxz --force --decompress $arkImg
+    unxz -T0 --force --decompress $arkImg
     arkImg=$(find . |grep "ArkOS_R35S-R36S")
     mv ${arkImg} ${ThisImgName}
 fi
