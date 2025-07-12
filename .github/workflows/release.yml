@@ -3,6 +3,15 @@
 name: release them all BWUAHAHAHAH
 on:
   workflow_dispatch:
+    inputs:
+      debug:
+        description: 'debug'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - false
+          - true
 
 jobs:
   get_build_date:
@@ -15,14 +24,14 @@ jobs:
         id: set_date
         run:  |
           export datenow=$(TZ=America/New_York date +%Y-%m-%d-%H%M%S)
-          echo "datedash=$(echo $datenow)" >> $GITHUB_OUTPUT 
-          echo "date=$(echo $datenow | sed 's|\-||g')" >> $GITHUB_OUTPUT 
+          echo "datedash=$(echo $datenow)" >> $GITHUB_OUTPUT
+          echo "date=$(echo $datenow | sed 's|\-||g')" >> $GITHUB_OUTPUT
 
 
   build:
     strategy:
       matrix:
-        # amberelec ark pan4elec rocknix uos   
+        # amberelec ark pan4elec rocknix uos
         # bookworm jammy noble plucky
         amberelec:  [amberelec, skipamberelec]
         ark:        [ark, skipark]
@@ -131,15 +140,15 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-          
+
       - uses: actions/checkout@v4
 
       - name: Build img
         run: |
-          export BuildImgEnv=github 
+          export BuildImgEnv=github
           export GH_build_date=${{ needs.get_build_date.outputs.build_date }}
           for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }}
-          do 
+          do
             [[ $i == "skip"* ]] && continue
             echo "Adding $i to NewOSList"
             if [[ -z "$NewOSList" ]]; then
@@ -151,8 +160,9 @@ jobs:
           [[ ! "${{ matrix.armbian }}" = skiparmbian ]] && export NewOSList="$NewOSList ${{ matrix.armbian }}"
           echo NewOSList=$NewOSList
           export NewOSList="$(echo $NewOSList| xargs)"
-          echo NewOSList=$NewOSList  
-          chmod a+x ./buildimg.sh 
+          echo NewOSList=$NewOSList
+          chmod a+x ./buildimg.sh
+          export ghdebug=${{ inputs.debug }}
           ./buildimg.sh $NewOSList
           echo df -h /
           df -h /

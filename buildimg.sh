@@ -1,4 +1,6 @@
 #!/bin/bash
+[[ "$ghdebug" == "true" ]] && set -x
+
 # amberelec ark pan4elec rocknix uos bookworm jammy noble plucky
 
 if [[ "$1" == "testoses" ]]
