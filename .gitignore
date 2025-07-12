@@ -6,8 +6,7 @@ os_template
 tmp
 roms
 test
-EZ/EZStorage_all/*
-EZ/*-freshroms/
-EZ/00_tars/*
+EZ/EZStorage_all/**
+EZ/00_tars/**
 EZ/EZStorage_all.tar
 EZ/EZStorage_all.tar.xz
