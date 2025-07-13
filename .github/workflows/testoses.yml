@@ -1,0 +1,161 @@
+# This is a basic workflow to help you get started with Actions
+
+name: test single oses
+on:
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'debug'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - false
+          - true
+
+jobs:
+  get_build_date:
+    runs-on: ubuntu-latest
+    outputs:
+      build_datedash: ${{ steps.set_date.outputs.datedash }}
+      build_date: ${{ steps.set_date.outputs.date }}
+    steps:
+      - name: Set build date
+        id: set_date
+        run:  |
+          export datenow=$(TZ=America/New_York date +%Y-%m-%d-%H%M%S)
+          echo "datedash=$(echo $datenow)" >> $GITHUB_OUTPUT
+          echo "date=$(echo $datenow | sed 's|\-||g')" >> $GITHUB_OUTPUT
+
+
+  build:
+    strategy:
+      matrix:
+        include:
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: bookworm
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: jammy
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: noble
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: plucky
+          - amberelec: amberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: skiparmbian
+          - amberelec: skipamberelec
+            ark: ark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: skiparmbian
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: pan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            armbian: skiparmbian
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: rocknix
+            uos: skipuos
+            armbian: skiparmbian
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: uos
+            armbian: skiparmbian
+    runs-on: ubuntu-latest
+    needs: get_build_date
+
+    steps:
+      - name: Skip unwanted jobs
+        if: |
+          matrix.amberelec == 'skipamberelec' &&
+          matrix.ark == 'skipark' &&
+          matrix.pan4elec == 'skippan4elec' &&
+          matrix.rocknix == 'skiprocknix' &&
+          matrix.uos == 'skipuos' &&
+          (
+            matrix.armbian == 'skiparmbian' ||
+            matrix.armbian == 'bookworm' ||
+            matrix.armbian == 'jammy' ||
+            matrix.armbian == 'noble' ||
+            matrix.armbian == 'plucky'
+          )
+        run: |
+          echo "This is an excluded combination, skipping."
+          exit 0
+
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - uses: actions/checkout@v4
+
+      - name: install Exfat
+        run: sudo apt -y install exfatprogs
+
+      - name: Build img
+        run: |
+          export BuildImgEnv=github
+          export GH_build_date=${{ needs.get_build_date.outputs.build_date }}
+          for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }}
+          do
+            [[ $i == "skip"* ]] && continue
+            echo "Adding $i to NewOSList"
+            if [[ -z "$NewOSList" ]]; then
+              export NewOSList=$i
+            else
+              export NewOSList="$NewOSList $i"
+            fi
+          done
+          [[ ! "${{ matrix.armbian }}" = skiparmbian ]] && export NewOSList="$NewOSList ${{ matrix.armbian }}"
+          echo NewOSList=$NewOSList
+          export NewOSList="$(echo $NewOSList| xargs)"
+          echo NewOSList=$NewOSList
+          chmod a+x ./buildimg.sh
+          export ghdebug=${{ inputs.debug }}
+          ./buildimg.sh $NewOSList
+          echo df -h /
+          df -h /
+          echo df end
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: R36S-Multiboot-*.img.xz.7z.*
+          draft: true
+          name: batch ${{ needs.get_build_date.outputs.build_datedash }}
+          tag_name: v${{ needs.get_build_date.outputs.build_date }}
+          body: |
+            # [Download Images Here](https://${{ github.repository_owner }}.github.io/R36S-Multiboot/)
+            (https://${{ github.repository_owner }}.github.io/R36S-Multiboot)
