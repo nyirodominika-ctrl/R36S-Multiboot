@@ -56,11 +56,11 @@ if [[ "$BuildImgEnv" == "github" ]]
 then
     if [[ "$@" == *"bookworm jammy noble pluck"* ]] # anticipate never-ending ubuntu releases
     then
-        say "Building the big one, reducing armbian size"
+        say "Building the big one, reducing size requirements"
         # jammy+/sizereq is currently a symlink to bookworm/sizereq
         # so we can just change bookworm/sizereq
-        say "Reducing armbian/sizereq to 5120"
         echo 5120 > bookworm/sizereq
+        echo 1024 > amberelec/sizereq
     fi
 fi
 
