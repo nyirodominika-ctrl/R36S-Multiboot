@@ -206,17 +206,8 @@ sleep 3
 say fill boot partition
 sudo cp -R commonbootfiles/* "${ImgBootMnt}"
 
-## Build local tar
-# tar -cvf EZStorage_all.tar EZStorage_all
-## Build gh tar.xz.*
-# tar --exclude="*/gb/*.zip" --exclude="*/bioa/*" --exclude="*/00_Videos/*" -c EZStorage_all | xz -z -e -9 -T0 | split -b 95m - EZStorage_all.tar.xz.
-
-if [[ "$BuildImgEnv" == "github" ]]
-then
-    cat "${StartDir}/EZ/EZStorage_all.tar.xz."* | xz -d -c > "${StartDir}/EZ/EZStorage_all.tar"
-else
-    tar -cf "${StartDir}/EZ/EZStorage_all.tar" -C "${StartDir}/EZ" EZStorage_all
-fi
+## Build tar.xz
+# tar --exclude="*/gb/*.zip" --exclude="*/bios/*" --exclude="*/00_*/*" --exclude="*/n64/*.zip" -c EZStorage_all > EZStorage_all.tar
 
 sudo cp "${StartDir}/EZ/EZStorage_all.tar" "${ImgBootMnt}/EZStorage_all.tar"
 sudo cp "${StartDir}/EZ/setup-ezstorage.sh" "${ImgBootMnt}/setup-ezstorage.sh"

@@ -39,13 +39,6 @@ jobs:
         rocknix:    [rocknix, skiprocknix]
         uos:        [uos, skipuos]
         armbian:    [skiparmbian, bookworm, jammy, noble, plucky]
-        include:
-          - amberelec: amberelec
-            ark: ark
-            pan4elec: pan4elec
-            rocknix: rocknix
-            uos: uos
-            armbian: bookworm jammy noble plucky
         exclude:
           - amberelec: skipamberelec
             ark: skipark

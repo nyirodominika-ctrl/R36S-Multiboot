@@ -9,7 +9,7 @@
 ## Installation
 - Image(s) are big and split into parts for github release.
     - [get all the numbered files from the DL page(7z.001, 7z.002, etc)](https://r36s-stuff.github.io/R36S-Multiboot) and extract it with 7zip or nanaZip.
-        - (linux users, ive found p7zip to be unreliable, try the official 7zip or official rar if you have issues.)
+        - (linux users, i've found p7zip to be unreliable, try the official 7zip or official rar if you have issues.)
         - flahsing from android? let me know if you get that to work, so i can make a guide for others.
 
 - once extracted, youll have another compressed file, `<image>.xz`
@@ -116,6 +116,55 @@ These images support the original R36S panel, and the 4 new panels, all in one i
 #                                     #
 # # # # # # # # # # # # # # # # # # # #
 ```
+# Dont like the boot logo color?
+## Change it!
+## Hold L1, and or L2, to set the logo via the following buttons
+```
+#     Logo Size:
+#     L1+<btn>    = Big Logo
+#     L2+<btn>    = Small Logo
+#     L1+L2+<btn> = No Logo (just color fill)
+
+#     Color:
+#     U         =   White
+#     D         =   Black
+#     R         =   Orange
+#     L         =   Purple
+#     X(north)  =   Blue
+#     A(east)   =   Red
+#     B(south)  =   Yellow
+#     Y(west)   =   Green
+#     Select    =   Lake Blue
+#     Start     =   Alt Red
+
+# # # # # # # # # # # # # # # # # # # #
+#  _________________________________  #
+# |                                 | #
+# |                                 | #
+# |                                 | #
+# |                                 | #
+# |                                 | #
+# |                                 | #
+# |                                 | #
+# |                                 | #
+# |_________________________________| #
+#                                     #
+#       White              Blue       #
+#         ▲                (X)        #
+# Purple◄   ►Orange Green(Y) (A) Red  #
+#         ▼                (B)        #
+#       Black             Yellow      #
+#        _                  _         #
+#      /   \              /   \       #
+#     |     |  (-)  (+)  |     |      #
+#      \ _ /  Lake  Alt   \ _ /       #
+#             Blue  Red               #
+# # # # # # # # # # # # # # # # # # # #
+```
+
+- next boot you can **hold `L1, L2, and Volume Down`** to make it semi-permanent (and prevent accidental logo changing)
+
+- ps: to change the logo to a custom one, just replace a file in `Logos/<Size>/<Color>.bmp` and optionally the logo.bmp on the root of the boot partition.
 
 # EZSTORAGE breif explanation (wiki/guide planned)
 
@@ -126,9 +175,9 @@ do not afraid, its EZ.
 
 - just boot the image to whatever OS is default, wait for it to fully boot and get to Emustation
 - now, all the rom folders sill be set up. you can fill the device with roms basically as you normally would, with a few exceptions:
-    - every OS is a little different and has different rom folders. to account for that, on the EZSTORAGE partition, there are multiple folders thatstart with an underscore, `_` , these folders contain rom folders that are not common between all OSes.
-    - if youre adding roms remotely, ie from a webui, or SAMBA share, you will not see these folders, only the folders compatible with that OS, in their normal structure.
-    - folders that start with `00_` are VIRTUAL. for instance, every os has a "music" folder but some are named differently, but 5 copys of the same music is silly and ridiculous, so you can use `00_Music` to add them to all OSes. (music added remotely, to the OS's music folder also ends up here)
+    - every OS is a little different and has different rom folders. to account for that, on the EZSTORAGE partition, there are multiple folders that start with an underscore, `_` , these folders contain rom folders that are not common between all OSes.
+    - if youre adding roms remotely, ie from a webui, or SAMBA share, you will not see these undescore folders, only the folders compatible with that OS, in their normal structure.
+    - folders that start with `00_` are VIRTUAL. for instance, every os has a "music" folder but some are named differently, but 5 copys of the same music is silly and ridiculous, so you can use `00_Music` to add them to all OSes. (Music added remotely, to the OS's music folder also ends up here)
     - i probably missed a common folder or two, let me know if you find more than one folder for the same emulated system, ill look into it eventually
     - scummvm. ports. "homebrew" is probably an issue and will be tested/fixed later if possible.
 
@@ -140,7 +189,7 @@ do not afraid, its EZ.
     - once you see Emustation, SD2 EZSTORAGE is ready to be used / filled
 
 - ArkOS
-    - untested atm, dont use, will likely require switching to Roms2 using the tools, like ark usually handles SD2
+    - untested atm, dont use, will likely require switching to Roms2 using the tools, like ark usually handles SD2. beta 2 sould have this fixed, if it's broken.
 
 
 ### TODO
@@ -154,7 +203,7 @@ do not afraid, its EZ.
 - Armbian standalone images are at [R36S-Stuff/R36S-Armbian](https://github.com/R36S-Stuff/R36S-Armbian/releases/latest)
 - Image(s) are big and most likely split into parts for github release.
     - [get all the numbered files from the dl page(.001, .002, etc)](https://r36s-stuff.github.io/R36S-Multiboot) and extract it with 7zip or nanaZip.
-    - (linux users, ive found p7zip to be unreliable, try the official 7zip or official rar if you have issues.)
+    - (linux users, i've found p7zip to be unreliable, try the official 7zip or official rar if you have issues.)
     - flahsing from android? let me know if you get that to work, so i can make a guide for others.
 
 ### Builder info
@@ -163,3 +212,14 @@ do not afraid, its EZ.
 - ~~might need dependencies to be installed (i will do this automatically later)~~
     - should be fine now?
 - can build single boot images for testing (or just u-boot with no OS arguments)
+
+### Thanks
+- Everyone in the R36S Community
+- All contributors to all the OSes used
+    - ArkOS
+    - AmberELEC
+    - PAN4ELEC
+    - Rocknix
+    - UnofficialOS
+- u/\_manster\_ on Reddit [for the logos](https://www.reddit.com/r/R36S/comments/1gv142z/my_attempt_at_r36s_color_specific_boot_logos/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+- @AeolusUX and @RetroGFX for being friendly, welcoming, and holding good conversation. (and the help/suggestions, obviously)
