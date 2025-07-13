@@ -47,7 +47,7 @@ mkdir tmp
 
 partcount=0
 nextpartstart=16
-bootsize=1136
+bootsize=1024
 imgsizereq=32
 storagesize=256
 
@@ -60,7 +60,7 @@ then
         # jammy+/sizereq is currently a symlink to bookworm/sizereq
         # so we can just change bookworm/sizereq
         echo 5120 > bookworm/sizereq
-        echo 1024 > amberelec/sizereq
+        echo 512 > amberelec/sizereq
     fi
 fi
 
