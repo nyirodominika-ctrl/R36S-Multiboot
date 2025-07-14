@@ -185,7 +185,7 @@
   <input type="checkbox" class="styled myCheckbox" name="option5" value="uos" checked>
   <span class="custom-checkbox"></span>
   UnofficialOS (dev)
-</label><br>
+</label><br><br>
 <h4>Select Armbian Version</h4>
 <label>
   <input type="radio" class="styled myCheckbox" name="option6" value="" id="noarmbian" checked>
@@ -219,6 +219,7 @@
 </label> -->
 <br><br>
 <b>Filename:</b> <i id="result"></i>
+<br><br>
 <!-- <p id="result"></p> -->
 <h4>Download links</h4>
 <div id="assetList"></div>
@@ -302,14 +303,15 @@ document.querySelectorAll('.myCheckbox').forEach(function(checkbox) {
 });
 
 // Add this block to handle "Armbian (all)" radio button logic
-document.getElementById('all').addEventListener('change', function() {
-  const allChecked = this.checked;
-  document.querySelectorAll('input[type="checkbox"].myCheckbox').forEach(function(cb) {
-    cb.checked = allChecked;
-    cb.disabled = allChecked;
-  });
-  getStringFromCheckboxes();
-});
+
+// document.getElementById('all').addEventListener('change', function() {
+//   const allChecked = this.checked;
+//   document.querySelectorAll('input[type="checkbox"].myCheckbox').forEach(function(cb) {
+//     cb.checked = allChecked;
+//     cb.disabled = allChecked;
+//   });
+//   getStringFromCheckboxes();
+// });
 
 // Also re-enable checkboxes if any other Armbian radio is selected
 document.querySelectorAll('input[type="radio"].myCheckbox:not(#all)').forEach(function(radio) {
