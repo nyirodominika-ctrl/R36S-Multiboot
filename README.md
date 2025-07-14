@@ -3,7 +3,7 @@
 # [Releases are at r36s-stuff.github.io/R36S-Multiboot](https://r36s-stuff.github.io/R36S-Multiboot)
 
 # Gameconsole R36S Multiboot images (and builder)
-(a wiki is planned)
+Shoutout to the [R36S Handheld Wiki](https://handhelds.wiki/R36S_Handheld_Wiki)
 
 
 ## Installation
@@ -213,7 +213,11 @@ do not afraid, its EZ.
     - should be fine now?
 - can build single boot images for testing (or just u-boot with no OS arguments)
 
-### Thanks
+## Thanks
+- u/\_manster\_ for 
+    - maintainig the amazing [R36S Handheld Wiki](https://handhelds.wiki/R36S_Handheld_Wiki)
+    - [and for the boot logos](https://www.reddit.com/r/R36S/comments/1gv142z/my_attempt_at_r36s_color_specific_boot_logos/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button) 
+- @AeolusUX and @RetroGFX for being friendly, welcoming, and holding good conversation. (and the help/suggestions, obviously)
 - Everyone in the R36S Community
 - All contributors to all the OSes used
     - ArkOS
@@ -221,5 +225,3 @@ do not afraid, its EZ.
     - PAN4ELEC
     - Rocknix
     - UnofficialOS
-- u/\_manster\_ on Reddit [for the logos](https://www.reddit.com/r/R36S/comments/1gv142z/my_attempt_at_r36s_color_specific_boot_logos/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
-- @AeolusUX and @RetroGFX for being friendly, welcoming, and holding good conversation. (and the help/suggestions, obviously)
