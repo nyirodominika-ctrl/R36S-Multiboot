@@ -104,7 +104,7 @@ jobs:
             uos: skipuos
             andr36oid: andr36oid
             armbian: skiparmbian
-      fail-fast: true
+      fail-fast: false
     runs-on: ubuntu-latest
     needs: get_build_date
 
@@ -167,6 +167,8 @@ jobs:
           echo df -h /
           df -h /
           echo df end
+          sleep $(shuf -i 1-100 -n 1)
+
 
       - name: Release
         uses: softprops/action-gh-release@v2
