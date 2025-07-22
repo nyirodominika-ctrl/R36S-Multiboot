@@ -38,67 +38,71 @@ jobs:
         pan4elec:   [pan4elec, skippan4elec]
         rocknix:    [rocknix, skiprocknix]
         uos:        [uos, skipuos]
-        armbian:    [skiparmbian, bookworm, jammy, noble, plucky]
+        andr36oid:    [andr36oid, skipandr36oid]
+        armbian:    [skiparmbian, bookworm, jammy]
         exclude:
           - amberelec: skipamberelec
             ark: skipark
             pan4elec: skippan4elec
             rocknix: skiprocknix
             uos: skipuos
+            andr36oid: skipandr36oid
             armbian: skiparmbian
           - amberelec: skipamberelec
             ark: skipark
             pan4elec: skippan4elec
             rocknix: skiprocknix
             uos: skipuos
+            andr36oid: skipandr36oid
             armbian: bookworm
           - amberelec: skipamberelec
             ark: skipark
             pan4elec: skippan4elec
             rocknix: skiprocknix
             uos: skipuos
+            andr36oid: skipandr36oid
             armbian: jammy
-          - amberelec: skipamberelec
-            ark: skipark
-            pan4elec: skippan4elec
-            rocknix: skiprocknix
-            uos: skipuos
-            armbian: noble
-          - amberelec: skipamberelec
-            ark: skipark
-            pan4elec: skippan4elec
-            rocknix: skiprocknix
-            uos: skipuos
-            armbian: plucky
           - amberelec: amberelec
             ark: skipark
             pan4elec: skippan4elec
             rocknix: skiprocknix
             uos: skipuos
+            andr36oid: skipandr36oid
             armbian: skiparmbian
           - amberelec: skipamberelec
             ark: ark
             pan4elec: skippan4elec
             rocknix: skiprocknix
             uos: skipuos
+            andr36oid: skipandr36oid
             armbian: skiparmbian
           - amberelec: skipamberelec
             ark: skipark
             pan4elec: pan4elec
             rocknix: skiprocknix
             uos: skipuos
+            andr36oid: skipandr36oid
             armbian: skiparmbian
           - amberelec: skipamberelec
             ark: skipark
             pan4elec: skippan4elec
             rocknix: rocknix
             uos: skipuos
+            andr36oid: skipandr36oid
             armbian: skiparmbian
           - amberelec: skipamberelec
             ark: skipark
             pan4elec: skippan4elec
             rocknix: skiprocknix
             uos: uos
+            andr36oid: skipandr36oid
+            armbian: skiparmbian
+          - amberelec: skipamberelec
+            ark: skipark
+            pan4elec: skippan4elec
+            rocknix: skiprocknix
+            uos: skipuos
+            andr36oid: andr36oid
             armbian: skiparmbian
       fail-fast: true
     runs-on: ubuntu-latest

@@ -60,7 +60,7 @@ then
         # jammy+/sizereq is currently a symlink to bookworm/sizereq
         # so we can just change bookworm/sizereq
         echo 5120 > bookworm/sizereq
-        echo 512 > amberelec/sizereq
+        #echo 512 > amberelec/sizereq
     fi
 fi
 
@@ -80,6 +80,11 @@ done
 
 imgsizereq=$((storagesize + imgsizereq))
 imgsize=$((bootsize + imgsizereq + 16))
+
+if [[ "$@" == *"andr36oid"* ]] # anticipate never-ending ubuntu releases
+then
+    [[ -n "$AnDataSizeOverride" ]] && imgsize=$((imgsize + AnDataSizeOverride)) || imgsize=$((imgsize + 8192))
+fi
 
 echo imgsize is $imgsize
 echo bootsize is $bootsize
@@ -242,7 +247,7 @@ bootiniadd 'fi'
 bootiniadd ""
 
 bootiniadd 'echo booting ${boot2}'
-bootiniadd 'mw 0x00800800 ffffffff 0x1000'
+bootiniadd 'mw.b 0x00800800 0 0x1000'
 bootiniadd 'load mmc 1:1 0x00800800 boot.${boot2}.ini'
 bootiniadd source 0x00800800
 

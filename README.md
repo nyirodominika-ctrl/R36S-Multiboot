@@ -29,14 +29,14 @@ Hold the function button with a face button for sticky boot, that os becomes the
 # b15   Right      =   AmberELEC
 # b14   Left       =   PAN4ELEC
 
-# c4    Function   =   Set sticky boot
+# c4    Function   =   <Set sticky boot>
 # d12   Start (+)  =   ArkOS
 # d9    Select (-) =   <Empty>
 
-# b5    B (south)  =   Armbian Bookworm
-# b6    Y (west)   =   Armbian Jammy
-# b7    X (north)  =   Armbian Noble
-# b2    A (east)   =   Armbian Plucky (TODO: move armbian to one button after a few betas)
+# b5    B (south)  =   <Empty>
+# b6    Y (west)   =   <Empty>
+# b7    X (north)  =   LinuX (Armbian Bookworm/Jammy/Noble/Plucky)
+# b2    A (east)   =   Andr36oid
 
 # # # # # # # # # # # # # # # # # # # #
 #  _________________________________  #
