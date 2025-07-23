@@ -38,7 +38,7 @@ jobs:
         pan4elec:   [pan4elec, skippan4elec]
         rocknix:    [rocknix, skiprocknix]
         uos:        [uos, skipuos]
-        andr36oid:    [andr36oid, skipandr36oid]
+        andr36oid:  [andr36oid, skipandr36oid]
         armbian:    [skiparmbian, bookworm, jammy]
         exclude:
           - amberelec: skipamberelec
@@ -109,23 +109,23 @@ jobs:
     needs: get_build_date
 
     steps:
-      - name: Skip unwanted jobs
-        if: |
-          matrix.amberelec == 'skipamberelec' &&
-          matrix.ark == 'skipark' &&
-          matrix.pan4elec == 'skippan4elec' &&
-          matrix.rocknix == 'skiprocknix' &&
-          matrix.uos == 'skipuos' &&
-          (
-            matrix.armbian == 'skiparmbian' ||
-            matrix.armbian == 'bookworm' ||
-            matrix.armbian == 'jammy' ||
-            matrix.armbian == 'noble' ||
-            matrix.armbian == 'plucky'
-          )
-        run: |
-          echo "This is an excluded combination, skipping."
-          exit 0
+      # - name: Skip unwanted jobs
+      #   if: |
+      #     matrix.amberelec == 'skipamberelec' &&
+      #     matrix.ark == 'skipark' &&
+      #     matrix.pan4elec == 'skippan4elec' &&
+      #     matrix.rocknix == 'skiprocknix' &&
+      #     matrix.uos == 'skipuos' &&
+      #     (
+      #       matrix.armbian == 'skiparmbian' ||
+      #       matrix.armbian == 'bookworm' ||
+      #       matrix.armbian == 'jammy' ||
+      #       matrix.armbian == 'noble' ||
+      #       matrix.armbian == 'plucky'
+      #     )
+      #   run: |
+      #     echo "This is an excluded combination, skipping."
+      #     exit 0
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -147,7 +147,7 @@ jobs:
         run: |
           export BuildImgEnv=github
           export GH_build_date=${{ needs.get_build_date.outputs.build_date }}
-          for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }}
+          for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }} ${{ matrix.andr36oid }}
           do
             [[ $i == "skip"* ]] && continue
             echo "Adding $i to NewOSList"
@@ -171,6 +171,7 @@ jobs:
 
 
       - name: Release
+        id: release
         uses: softprops/action-gh-release@v2
         with:
           files: R36S-Multiboot-*.img.xz.7z.*
@@ -180,3 +181,59 @@ jobs:
           body: |
             # [Download Images Here](https://${{ github.repository_owner }}.github.io/R36S-Multiboot/)
             (https://${{ github.repository_owner }}.github.io/R36S-Multiboot)
+
+      - name: Sleep before retry
+        if: failure() && steps.release.outcome == 'failure'
+        run: |
+          sleep $(( $(shuf -i 30-300 -n 1) ))
+
+      - name: Release Retry
+        id: retry1
+        if: failure() && steps.release.outcome == 'failure'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: R36S-Multiboot-*.img.xz.7z.*
+          draft: true
+          name: batch ${{ needs.get_build_date.outputs.build_datedash }}
+          tag_name: v${{ needs.get_build_date.outputs.build_date }}
+          body: |
+            # [Download Images Here](https://${{ github.repository_owner }}.github.io/R36S-Multiboot/)
+            (https://${{ github.repository_owner }}.github.io/R36S-Multiboot)
+
+      - name: Sleep before retry 2
+        if: failure() && steps.retry1.outcome == 'failure'
+        run: |
+          sleep $(( $(shuf -i 30-300 -n 1) ))
+
+      - name: Release Retry 2
+        id: retry2
+        if: failure() && steps.retry1.outcome == 'failure'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: R36S-Multiboot-*.img.xz.7z.*
+          draft: true
+          name: batch ${{ needs.get_build_date.outputs.build_datedash }}
+          tag_name: v${{ needs.get_build_date.outputs.build_date }}
+          body: |
+            # [Download Images Here](https://${{ github.repository_owner }}.github.io/R36S-Multiboot/)
+            (https://${{ github.repository_owner }}.github.io/R36S-Multiboot)
+
+      - name: Sleep before retry 3
+        if: failure() && steps.retry2.outcome == 'failure'
+        run: |
+          sleep $(( $(shuf -i 30-300 -n 1) ))
+
+      - name: Release Retry 3
+        id: retry3
+        if: failure() && steps.retry2.outcome == 'failure'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: R36S-Multiboot-*.img.xz.7z.*
+          draft: true
+          name: batch ${{ needs.get_build_date.outputs.build_datedash }}
+          tag_name: v${{ needs.get_build_date.outputs.build_date }}
+          body: |
+            # [Download Images Here](https://${{ github.repository_owner }}.github.io/R36S-Multiboot/)
+            (https://${{ github.repository_owner }}.github.io/R36S-Multiboot)
+
+
