@@ -39,6 +39,8 @@ jobs:
         andr36oid:  [andr36oid]
         armbian:    [bookworm jammy]
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     needs: get_build_date
 
     steps:
