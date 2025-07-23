@@ -80,7 +80,7 @@ jobs:
         run: |
           export BuildImgEnv=github
           export GH_build_date=${{ needs.get_build_date.outputs.build_date }}
-          for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }}
+          for i in ${{ matrix.amberelec }} ${{ matrix.ark }} ${{ matrix.pan4elec }} ${{ matrix.rocknix }} ${{ matrix.uos }} ${{ matrix.andr36oid }}
           do
             [[ $i == "skip"* ]] && continue
             echo "Adding $i to NewOSList"
