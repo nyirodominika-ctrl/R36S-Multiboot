@@ -106,6 +106,8 @@ jobs:
             armbian: skiparmbian
       fail-fast: false
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     needs: get_build_date
 
     steps:
