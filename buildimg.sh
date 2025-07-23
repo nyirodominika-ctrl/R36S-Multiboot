@@ -47,9 +47,9 @@ mkdir tmp
 
 partcount=0
 nextpartstart=16
-bootsize=1024
+bootsize=48
 imgsizereq=32
-storagesize=256
+storagesize=24
 
 # shrink armbian sizes if building the big one
 if [[ "$BuildImgEnv" == "github" ]]
@@ -80,11 +80,6 @@ done
 
 imgsizereq=$((storagesize + imgsizereq))
 imgsize=$((bootsize + imgsizereq + 16))
-
-if [[ "$@" == *"andr36oid"* ]] # anticipate never-ending ubuntu releases
-then
-    [[ -n "$AnDataSizeOverride" ]] && imgsize=$((imgsize + AnDataSizeOverride)) || imgsize=$((imgsize + 8192))
-fi
 
 echo imgsize is $imgsize
 echo bootsize is $bootsize
@@ -291,14 +286,27 @@ for arg in "$@"; do
     cd "${StartDir}"
 done
 
-say create storage partition
-newpart ${storagesize} exfat EZSTORAGE
-Storagemount="${StartDir}/tmp/storage.tmpmnt"
 
-[[ -d commonStoragefiles ]] && say fill storage partition
-[[ -d commonStoragefiles ]] && mkdir -p "${Storagemount}"
-[[ -d commonStoragefiles ]] && sudo mount ${ImgLodev}p${partcount} "${Storagemount}"
-[[ -d commonStoragefiles ]] && sudo cp -R commonStoragefiles/* "${Storagemount}" || true
+if [[ "$@" == *"andr36oid"* ]] 
+then
+    sayin add android data partition
+    sync
+    sudo umount "${ImgBootMnt}"
+    [[ -n "$AnDataSizeOverride" ]] && imgsize=$((imgsize + AnDataSizeOverride)) || imgsize=$((imgsize + 8192))
+    sudo losetup -d $ImgLodev
+    fallocate -l ${imgsize}MiB ${BuildingImgFullPath}
+    sync
+    sudo losetup -P ${ImgLodev} ${BuildingImgFullPath}
+    sudo parted -s ${ImgLodev} resizepart 2 100%
+    sudo mount ${ImgLodev}p1 "${ImgBootMnt}"
+    [[ -n "$AnDataSizeOverride" ]] && npsz=$AnDataSizeOverride || npsz=8192
+    sayin new $((npsz/1024))GiB partition
+    newpart $npsz ext4 andata
+fi
+
+say create storage partition
+newpart 8 exfat EZSTORAGE
+Storagemount="${StartDir}/tmp/storage.tmpmnt"
 
 say finalize image
 sync
@@ -321,9 +329,9 @@ sync
 if [[ "$BuildImgEnv" == "github" ]]
 then
     fallocate --dig-holes ${OutImg}
-
+    sayin comoressing with xz
     xz -z -7 -T0 ${OutImg}
-
+    sayin splitting with 7z
     7z a -mx9 -md512m -mfb273 -mmt2 -v2000m ${OutImg7z} ${OutImgXZ}
     ls ${StartDir}/${imgname}-*
 fi

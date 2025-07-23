@@ -17,12 +17,12 @@ ThisRootPartNum=${partcount}
 ThisRootDev=${ImgLodev}p${ThisRootPartNum}
 sayin new root is ${ThisRootDev}
 
-[[ -n "$AnDataSizeOverride" ]] && npsz=$AnDataSizeOverride || npsz=8192
-sayin new $((npsz/1024))GiB partition
-newpart $npsz ext4 andata
-ThisDataPartNum=${partcount}
-ThisDataDev=${ImgLodev}p${ThisRootPartNum}
-sayin new data is ${ThisRootDev}
+# [[ -n "$AnDataSizeOverride" ]] && npsz=$AnDataSizeOverride || npsz=8192
+# sayin new $((npsz/1024))GiB partition
+# newpart $npsz ext4 andata
+# ThisDataPartNum=${partcount}
+# ThisDataDev=${ImgLodev}p${ThisRootPartNum}
+# sayin new data is ${ThisRootDev}
 
 sayin setup mounts
 OSBootMnt=${tmpmnts}/os-${OsName}-boot
