@@ -49,6 +49,7 @@ sudo mount ${ThisBootDev} "${DestBootMnt}"
 sayin copy kernel and gapps to ${imgname} boot partition
 sudo cp -v "${OSBootMnt}/Image" "${DestBootMnt}"
 sudo cp -v "${OSBootMnt}/rk3326-r36s-android.dtb" "${DestBootMnt}"
+sudo cp -vr "${OSBootMnt}/Panels" "${DestBootMnt}"
 #wget --no-verbose --quiet -Ogapps.zip "https://archive.org/download/MindTheGapps/MindTheGapps-11.0.0-arm64-20210412_124247.zip"
 # sudo mkdir -p "${DestBootMnt}/gapps"
 # sudo unzip gapps.zip -d "${DestBootMnt}/gapps"
