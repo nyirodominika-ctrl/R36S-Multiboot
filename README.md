@@ -33,10 +33,10 @@ Hold the function button with a face button for sticky boot, that os becomes the
 #  Right      =   AmberELEC
 #  Left       =   PAN4ELEC
 
-#  B (south)  =   <Empty>
-#  Y (west)   =   <Empty>
-#  X (north)  =   LinuX (Armbian Bookworm/Jammy/Noble/Plucky)
 #  A (east)   =   Andr36oid
+#  B (south)  =   <Empty>
+#  X (north)  =   LinuX (Armbian Bookworm/Jammy/Noble/Plucky)
+#  Y (west)   =   <Empty>
 
 # # # # # # # # # # # # # # # # # # # #
 #  _________________________________  #
