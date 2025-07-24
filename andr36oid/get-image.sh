@@ -3,7 +3,7 @@ sudo apt install -y gh #>/dev/null 2>&1
 
 if [[ ! -f "${ThisImgName}" ]]
 then
-    gh release download -p "*.img.zip" -D dl -R andr36oid/releases
+    gh release download -p "*r36s-android.img.zip" -D dl -R andr36oid/releases
     cd dl
     dlf1=$(find -name "*.img.zip") 
     unzip $dlf1
