@@ -99,11 +99,11 @@ cd $thisosdir
 sudo rm -rf "$TMP"
 
 
+
 sayin cleanup mounts and img dev
 sync
 sudo umount ${Thislodev}p1
 sudo umount ${Thislodev}p2
-
 sudo umount ${ThisBootDev}
 sudo umount ${ThisRootDev}
 #sudo umount ${ThisDataDev}
@@ -113,3 +113,24 @@ sudo losetup -d ${Thislodev}
 
 [[ "$BuildImgEnv" == "github" ]] && rm ${ThisImgName} || sayin keep ${ThisImgName}
 
+
+# if [[ "$@" == *"andr36oid"* ]] 
+# then
+
+
+
+    sayin add android data partition
+    sync
+    sudo umount "${ImgBootMnt}"
+    [[ -n "$AnDataSizeOverride" ]] && imgsize=$((imgsize + AnDataSizeOverride)) || imgsize=$((imgsize + 8192))
+    sudo losetup -d $ImgLodev
+    fallocate -l ${imgsize}MiB ${BuildingImgFullPath}
+    sync
+    sudo losetup -P ${ImgLodev} ${BuildingImgFullPath}
+    sudo parted -s ${ImgLodev} resizepart 2 100%
+    sudo mount ${ImgLodev}p1 "${ImgBootMnt}"
+    [[ -n "$AnDataSizeOverride" ]] && npsz=$AnDataSizeOverride || npsz=8192
+    sayin new $((npsz/1024))GiB partition
+    newpart $npsz ext4 andata
+
+# fi

@@ -67,7 +67,7 @@ sudo cp -v fstab.rk30board "${DestRootMnt}/fstab.rk30board"
 
 sudo sed -i "s|###bootPartNum###|${ThisBootPartNum}|g" "${DestRootMnt}/fstab.rk30board"
 sudo sed -i "s|###rootPartNum###|${ThisRootPartNum}|g" "${DestRootMnt}/fstab.rk30board"
-sudo sed -i "s|###dataPartNum###|${ThisDataPartNum}|g" "${DestRootMnt}/fstab.rk30board"
+sudo sed -i "s|###dataPartNum###|$(( ThisRootPartNum + 1 ))|g" "${DestRootMnt}/fstab.rk30board"
 
 
 # mount data partition
