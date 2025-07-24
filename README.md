@@ -22,21 +22,21 @@ hold a face button while powering on to boot another OS.
 Hold the function button with a face button for sticky boot, that os becomes the new default.
 
 ```
-# GPIO  Button     =   OS
+#  Button     =   OS
 
-# b12   Up         =   UnofficialOS
-# b13   Down       =   Rocknix
-# b15   Right      =   AmberELEC
-# b14   Left       =   PAN4ELEC
+#  Function   =   <Set sticky boot>
+#  Start (+)  =   ArkOS
+#  Select (-) =   <Empty>
 
-# c4    Function   =   <Set sticky boot>
-# d12   Start (+)  =   ArkOS
-# d9    Select (-) =   <Empty>
+#  Up         =   UnofficialOS
+#  Down       =   Rocknix
+#  Right      =   AmberELEC
+#  Left       =   PAN4ELEC
 
-# b5    B (south)  =   <Empty>
-# b6    Y (west)   =   <Empty>
-# b7    X (north)  =   LinuX (Armbian Bookworm/Jammy/Noble/Plucky)
-# b2    A (east)   =   Andr36oid
+#  B (south)  =   <Empty>
+#  Y (west)   =   <Empty>
+#  X (north)  =   LinuX (Armbian Bookworm/Jammy/Noble/Plucky)
+#  A (east)   =   Andr36oid
 
 # # # # # # # # # # # # # # # # # # # #
 #  _________________________________  #
@@ -50,11 +50,11 @@ Hold the function button with a face button for sticky boot, that os becomes the
 # |                                 | #
 # |_________________________________| #
 #                                     #
-#        UOS             Noble        #
-#         ▲               (X)         #
-#   PAN4◄   ►Amber Jammy(Y) (A)Plucky #
+#        UOS            Armbian       #
+#         ▲           Linu(X)         #
+#  PAN4 ◄   ► Amber     (Y) (A)ndroid #
 #         ▼               (B)         #
-#      Rocknix   (Fn)   Bookworm      #
+#      Rocknix   (Fn)                 #
 #         _     Sticky     _          #
 #       /   \            /   \        #
 #      |     | (-)  (+) |     |       #

@@ -22,3 +22,20 @@
 # R2        =   d15
 # L1        =   c6
 # L2        =   d10
+
+## bootbuttons ##
+# GPIO  Button     =   OS
+
+# b12   Up         =   UnofficialOS
+# b13   Down       =   Rocknix
+# b15   Right      =   AmberELEC
+# b14   Left       =   PAN4ELEC
+
+# c4    Function   =   <Set sticky boot>
+# d12   Start (+)  =   ArkOS
+# d9    Select (-) =   <Empty>
+
+# b5    B (south)  =   <Empty>
+# b6    Y (west)   =   <Empty>
+# b7    X (north)  =   LinuX (Armbian Bookworm/Jammy/Noble/Plucky)
+# b2    A (east)   =   Andr36oid
