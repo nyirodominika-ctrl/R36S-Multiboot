@@ -33,7 +33,7 @@ ZIP=$(pwd)/gapps.zip
 [[ -d "$TMP" ]] && sudo rm -rf "$TMP" || true
 mkdir -p $TMP
 cd "$TMP"
-unzip -o "$ZIP"
+#unzip -o "$ZIP"
 rm -rf META-INF
 
 # ui_print "Setting up environment"
